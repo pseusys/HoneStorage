@@ -1,0 +1,76 @@
+name: PUBLISH
+
+
+on:
+  push:
+    paths:
+      - 'lib/**'
+      - 'web/**'
+      - 'pubspec.yml'
+      - '.github/workflows/publish.yml'
+
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+
+jobs:
+  publish:
+    name: Publish web app to GitHub Pages
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+
+      - name: Setup Pages 📄
+        uses: actions/configure-pages@v3
+
+      - name: Get Flutter 🐦
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.7.3
+          channel: 'stable'
+
+      - name: Get Dependencies 📥
+        run: flutter pub get
+
+      - name: Generate Code 📇
+        run: flutter pub run build_runner build
+
+      - name: Build Web Application 🏗️
+        run: flutter build web --base-href /HoneStorage/ --dart-define BUILD_SECRET=$(echo $RANDOM | md5sum | head -c 12)
+
+      - name: NoJekyll ❌
+        run: touch build/web/.nojekyll
+
+      - name: Save Branch Name Without Slashes 📛
+        if: ${{ github.ref != 'refs/heads/stem' }}
+        env:
+          BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+        run: echo "BRANCH_NAME=${BRANCH_NAME////_}" >> $GITHUB_ENV
+
+      - name: Save Artifact 📦
+        if: ${{ github.ref != 'refs/heads/stem' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ format('github-pages-for-branch-{0}', env.BRANCH_NAME) }}
+          path: 'build/web'
+          retention-days: 3
+
+      - name: Upload Artifact 🎁
+        if: ${{ github.ref == 'refs/heads/stem' }}
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: 'build/web'
+
+      - name: Deploy to GitHub Pages 🚀
+        if: ${{ github.ref == 'refs/heads/stem' }}
+        uses: actions/deploy-pages@v1
