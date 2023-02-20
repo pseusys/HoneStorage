@@ -46,7 +46,9 @@ jobs:
         run: flutter pub run build_runner build
 
       - name: Build Web Application 🏗️
-        run: flutter build web --base-href /HoneStorage/ --dart-define BUILD_SECRET=$(echo $RANDOM | md5sum | head -c 12)
+        env:
+          SECRET_VECTOR: ${{ secrets.HONESTORAGE_SECRET_VECTOR }}
+        run: flutter build web --base-href /HoneStorage/ --dart-define SECRET_VECTOR=$SECRET_VECTOR
 
       - name: NoJekyll ❌
         run: touch build/web/.nojekyll

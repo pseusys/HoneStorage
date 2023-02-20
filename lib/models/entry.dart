@@ -7,14 +7,19 @@ part 'entry.g.dart';
 
 @JsonSerializable()
 class Entry {
-  @JsonKey(name: 'format', toJson: formatToString, fromJson: stringToFormat)
-  final Format format;
+  @JsonKey(name: 'format', toJson: formatToString, fromJson: stringToFormat, includeFromJson: true, includeToJson: true)
+  final Format _format;
   @JsonKey(name: 'name')
   final String name;
   @JsonKey(name: 'data')
   final String data;
 
-  const Entry(this.format, this.name, this.data);
+  const Entry(this.name, this.data, this._format);
+
+  String get private => _format.check(data) ? _format.viewPrivate(data) : data;
+  String get protected => _format.check(data) ? _format.viewProtected(data) : data;
+  String get public => _format.check(data) ? _format.viewPublic(data) : data;
+  bool get check => _format.check(data);
 
   factory Entry.fromJson(Map<String, dynamic> json) => _$EntryFromJson(json);
   Map<String, dynamic> toJson() => _$EntryToJson(this);

@@ -1,31 +1,58 @@
-import 'dart:typed_data';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:pointycastle/export.dart';
+import 'package:honestorage/blocs/bloc.dart';
+import 'package:honestorage/blocs/event.dart';
+import 'package:honestorage/blocs/state.dart';
+import 'package:honestorage/formats/bank_card.dart';
+import 'package:honestorage/formats/email_address.dart';
+import 'package:honestorage/formats/multiline_text.dart';
+import 'package:honestorage/formats/password.dart';
+import 'package:honestorage/formats/phone_number.dart';
+import 'package:honestorage/formats/plain_text.dart';
+import 'package:honestorage/models/entry.dart';
+import 'package:honestorage/models/record.dart';
+import 'package:honestorage/widgets/dataset.dart';
 
-String encrypt(String text, String key) {
-  final digest = Digest('SHA-512/256');
-  final key_arr = digest.process(Uint8List.fromList(key.codeUnits));
-  final iv = Uint8List.fromList(const String.fromEnvironment('BUILD_SECRET').codeUnits);
+class HogWeedGo extends StatelessWidget {
+  static const String title = 'HoneStorage';
 
-  final cbc = StreamCipher('ChaCha7539/32')..init(true, ParametersWithIV(KeyParameter(key_arr), iv));
+  const HogWeedGo({Key? key}) : super(key: key);
 
-  final result = String.fromCharCodes(cbc.process(Uint8List.fromList(text.codeUnits)));
-  return result;
-}
-
-String decrypt(String text, String key) {
-  final digest = Digest('SHA-512/256');
-  final key_arr = digest.process(Uint8List.fromList(key.codeUnits));
-  final iv = Uint8List.fromList(const String.fromEnvironment('BUILD_SECRET').codeUnits);
-
-  final cbc = StreamCipher('ChaCha7539/32')..init(false, ParametersWithIV(KeyParameter(key_arr), iv));
-
-  final result = String.fromCharCodes(cbc.process(Uint8List.fromList(text.codeUnits)));
-  return result;
-}
-
-String sign(String text) {
-  final digest = Digest('Keccak/256');
-  final result = String.fromCharCodes(digest.process(Uint8List.fromList(text.codeUnits)));
-  return result;
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: title,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: BlocBuilder<DatasetBloc, DatasetState>(
+        buildWhen: (previous, current) => previous.name != current.name,
+        builder: (context, state) => Scaffold(
+          appBar: AppBar(
+            title: Text("$title: ${state.name}"),
+          ),
+          body: const DatasetWidget(),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              final rec = Record(
+                  "New Record",
+                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                  [
+                    Entry("Password", "098765", PasswordFormat()),
+                    Entry("Phone number", "1234567890", PhoneNumberFormat()),
+                    Entry("Plain text", "some text", PlainTextFormat()),
+                    Entry("Bank card", "1234567812345678", BankCardFormat()),
+                    Entry("Multiline text", "123456\n123456\n123456", MultilineTextFormat()),
+                    Entry("Email address", "as-rt.23@ret4.rt", EmailAddressFormat()),
+                  ]);
+              context.read<DatasetBloc>().add(RecordAdded(rec));
+            },
+            tooltip: "Add a report",
+            child: const Icon(Icons.add),
+          ),
+        ),
+      ),
+    );
+  }
 }

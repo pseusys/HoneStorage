@@ -1,16 +1,16 @@
 import 'package:honestorage/models/format.dart';
 
-class PhoneNumberFormat extends Format {
-  static final _checker = RegExp(r'^[\+]?\d{3}?\d{3}\d{4,6}$');
+class PlainTextFormat extends Format {
+  static final _checker = RegExp(r'^[^\n]*');
 
   @override
   bool get multiline => false;
 
   @override
-  bool get numerical => true;
+  bool get numerical => false;
 
   @override
-  String viewPrivate(String value) => "${value.substring(0, 2)}***${value.substring(value.length - 3)}";
+  String viewPrivate(String value) => "[plain text]";
 
   @override
   String viewProtected(String value) => value;

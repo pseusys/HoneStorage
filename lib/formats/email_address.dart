@@ -1,16 +1,16 @@
 import 'package:honestorage/models/format.dart';
 
-class PhoneNumberFormat extends Format {
-  static final _checker = RegExp(r'^[\+]?\d{3}?\d{3}\d{4,6}$');
+class EmailAddressFormat extends Format {
+  static final _checker = RegExp(r"^[a-zA-Z\d.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z\d-]+(?:\.[a-zA-Z\d-]+)*$");
 
   @override
   bool get multiline => false;
 
   @override
-  bool get numerical => true;
+  bool get numerical => false;
 
   @override
-  String viewPrivate(String value) => "${value.substring(0, 2)}***${value.substring(value.length - 3)}";
+  String viewPrivate(String value) => "${value.substring(0, 3)}***${value.substring(value.length - 2)}";
 
   @override
   String viewProtected(String value) => value;
