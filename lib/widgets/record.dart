@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 import 'package:honestorage/misc/constants.dart';
@@ -13,23 +11,22 @@ class RecordWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
 
-    double halfHeight = height / 2;
     double maxWidth;
     if (height > width) {
-      maxWidth = halfHeight - MEDIUM_MARGIN * 3;
+      maxWidth = width / 2 - MEDIUM_MARGIN * 5;
     } else {
-      int cardsCount = width ~/ halfHeight;
-      maxWidth = width ~/ cardsCount - MEDIUM_MARGIN * (cardsCount + 1);
+      final cardsCount = width * 2 ~/ height;
+      maxWidth = width / cardsCount - MEDIUM_MARGIN * (cardsCount * 2 + 1);
     }
 
     return Card(
       margin: EdgeInsets.zero,
       child: Container(
-        margin: const EdgeInsets.all(SMALL_MARGIN),
-        constraints: BoxConstraints(maxWidth: maxWidth),
+        margin: const EdgeInsets.all(LARGE_MARGIN),
+        constraints: BoxConstraints(maxWidth: maxWidth, minWidth: MIN_RECORD_WIDTH, minHeight: MIN_RECORD_HEIGHT),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
