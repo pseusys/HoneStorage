@@ -1,5 +1,4 @@
 import 'package:honestorage/models/dataset.dart';
-import 'package:honestorage/models/encoding.dart';
 import 'package:honestorage/models/record.dart';
 
 abstract class DatasetEvent {
@@ -17,7 +16,7 @@ class NameChanged extends DatasetEvent {
 }
 
 class EncodingChanged extends DatasetEvent {
-  final Encoding current;
+  final String current;
   const EncodingChanged(this.current);
 }
 

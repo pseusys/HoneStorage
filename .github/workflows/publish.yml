@@ -48,7 +48,7 @@ jobs:
       - name: Build Web Application 🏗️
         env:
           SECRET_VECTOR: ${{ secrets.HONESTORAGE_SECRET_VECTOR }}
-        run: flutter build web --base-href /HoneStorage/ --dart-define SECRET_VECTOR=$SECRET_VECTOR
+        run: flutter build web --web-renderer html --base-href /HoneStorage/ --dart-define SECRET_VECTOR=$SECRET_VECTOR
 
       - name: NoJekyll ❌
         run: touch build/web/.nojekyll
