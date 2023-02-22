@@ -7,14 +7,8 @@ class DatasetState {
   final List<Record> data;
 
   DatasetState(this.name, this.encoding, {this.data = const []});
-  factory DatasetState.initial() => DatasetState("Loading...", Encoding.NONE.name);
-  factory DatasetState.create() => DatasetState("New Dataset", Encoding.NONE.name);
+  factory DatasetState.copy(Dataset current) => DatasetState(current.name, current.encoding, data: current.data);
 
-  DatasetState copy(Dataset current) => DatasetState(
-        current.name,
-        current.encoding,
-        data: current.data,
-      );
   DatasetState copyWith({String? name, String? description, String? encoding, List<Record>? data}) => DatasetState(
         name ?? this.name,
         encoding ?? this.encoding,

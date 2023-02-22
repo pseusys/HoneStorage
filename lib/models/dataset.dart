@@ -21,6 +21,7 @@ class Dataset {
   final List<Record> data;
 
   Dataset(this.name, this.encoding, this.signature) : data = [];
+  factory Dataset.create() => Dataset("New Dataset", Encoding.NONE.name, "");
 
   Dataset fromJson(Map<String, dynamic> json) {
     Dataset parsed = _$DatasetFromJson(json);

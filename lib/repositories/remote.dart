@@ -6,7 +6,7 @@ abstract class BackupBackend {
   void synchronize(Dataset dataset);
 }
 
-class BackupRepository {
+class RemoteRepository {
   BackupBackend? _backend;
 
   bool get synchronized => _backend != null;

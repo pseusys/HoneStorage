@@ -1,24 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:honestorage/backends/repository.dart';
-import 'package:honestorage/blocs/bloc.dart';
+import 'package:honestorage/blocs/backup/bloc.dart';
+import 'package:honestorage/repositories/local.dart';
 
-import 'package:honestorage/honestorage.dart';
+import 'package:honestorage/repositories/remote.dart';
+import 'package:honestorage/navigation/information_provider.dart';
+import 'package:honestorage/navigation/router_delegate.dart';
 
-void main() => runApp(const Root());
+void main() => runApp(Root());
 
 class Root extends StatelessWidget {
-  const Root({Key? key}) : super(key: key);
+  static const String title = 'HoneStorage';
 
-  // TODO: get backup from shared preferences.
+  final local = LocalRepository();
+  final remote = RemoteRepository();
+  Root({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider(
-      create: (context) => BackupRepository(),
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider.value(value: local),
+        RepositoryProvider.value(value: remote),
+      ],
       child: BlocProvider(
-        create: (context) => DatasetBloc(context.read<BackupRepository>()),
-        child: const HogWeedGo(),
+        create: (context) => BackupBloc(local),
+        child: MaterialApp.router(
+          title: title,
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          routerDelegate: HonestRouterDelegate(),
+          routeInformationParser: HonestRouteInformationParser(),
+        ),
       ),
     );
   }
