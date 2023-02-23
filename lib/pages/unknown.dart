@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
 
-class UnknownWidget extends StatefulWidget {
+class UnknownPage extends StatelessWidget {
   static const String title = 'HoneStorage: Routing error!';
   static const value = ValueKey('UnknownPage');
-  const UnknownWidget() : super(key: value);
+  const UnknownPage() : super(key: value);
 
-  @override
-  State<UnknownWidget> createState() => _UnknownWidgetState();
-}
-
-class _UnknownWidgetState extends State<UnknownWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(UnknownWidget.title),
+        title: const Text(UnknownPage.title),
       ),
       body: Column(),
     );

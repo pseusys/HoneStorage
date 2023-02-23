@@ -25,7 +25,7 @@ class HonestRouterDelegate extends RouterDelegate<HoneState> with ChangeNotifier
   List<Page<dynamic>> buildPage(BuildContext context, BackupState state) {
     List<Page<dynamic>> pages = [];
     if (state.loading) {
-      pages.add(const MaterialPage(key: SplashWidget.value, child: SplashWidget()));
+      pages.add(const MaterialPage(key: SplashPage.value, child: SplashPage()));
       // Will emit next state automatically
     } else if (state.datasetCache != null) {
       context.read<BackupBloc>().add(BackupDecrypted(json.decode(state.datasetCache!)));
@@ -33,7 +33,7 @@ class HonestRouterDelegate extends RouterDelegate<HoneState> with ChangeNotifier
       // context.read<BackupBloc>().add(BackupDecrypted(dataset)); // To decrypt dataset
       // context.read<BackupBloc>().add(BackupSet(null)); // To remove cache
     } else if (state.dataset == null) {
-      pages.add(const MaterialPage(key: InitialWidget.value, child: InitialWidget()));
+      pages.add(const MaterialPage(key: InitialPage.value, child: InitialPage()));
       // context.read<BackupBloc>().add(BackupDecrypted(dataset)); // To create new dataset
       // context.read<BackupBloc>().add(BackupSet(backup)); // To locad from backend
     } else {
@@ -48,7 +48,7 @@ class HonestRouterDelegate extends RouterDelegate<HoneState> with ChangeNotifier
         } else {}
       }
     }
-    if (currentState.rout == Rout.UNKNOWN) pages.add(const MaterialPage(key: UnknownWidget.value, child: UnknownWidget()));
+    if (currentState.rout == Rout.UNKNOWN) pages.add(const MaterialPage(key: UnknownPage.value, child: UnknownPage()));
     return pages;
   }
 

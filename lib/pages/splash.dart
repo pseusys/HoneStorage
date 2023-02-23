@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 
-class SplashWidget extends StatefulWidget {
+class SplashPage extends StatelessWidget {
   static const value = ValueKey('SplashPage');
-  const SplashWidget() : super(key: value);
+  const SplashPage() : super(key: value);
 
-  @override
-  State<SplashWidget> createState() => _SplashWidgetState();
-}
-
-class _SplashWidgetState extends State<SplashWidget> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(

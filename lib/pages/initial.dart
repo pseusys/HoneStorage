@@ -5,21 +5,16 @@ import 'package:honestorage/blocs/backup/event.dart';
 
 import 'package:honestorage/models/dataset.dart';
 
-class InitialWidget extends StatefulWidget {
+class InitialPage extends StatelessWidget {
   static const String title = 'Welcome to HoneStorage!';
   static const value = ValueKey('InitialPage');
-  const InitialWidget() : super(key: value);
+  const InitialPage() : super(key: value);
 
-  @override
-  State<InitialWidget> createState() => _InitialWidgetState();
-}
-
-class _InitialWidgetState extends State<InitialWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(InitialWidget.title),
+        title: const Text(InitialPage.title),
       ),
       body: Center(
         child: Column(
