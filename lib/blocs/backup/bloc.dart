@@ -13,7 +13,7 @@ class BackupBloc extends Bloc<BackupEvent, BackupState> {
     on<BackupLoaded>(_backUpLoaded);
     on<BackupSet>(_setBackup);
 
-    _localRepository.getCache().then((value) => add(BackupLoaded(value)));
+    _localRepository.getLocal().then((value) => add(BackupLoaded(value)));
   }
 
   void _backUpLoaded(BackupLoaded event, Emitter<BackupState> emit) {
@@ -24,6 +24,7 @@ class BackupBloc extends Bloc<BackupEvent, BackupState> {
   }
 
   void _setBackup(BackupSet event, Emitter<BackupState> emit) {
-    _localRepository.setDataset(event.dataset).then((value) => add(BackupLoaded(value)));
+    final serial = event.dataset?.toJson().toString();
+    _localRepository.setLocal(serial).then((value) => add(BackupLoaded(value)));
   }
 }
