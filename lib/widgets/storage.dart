@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reorderables/reorderables.dart';
 
 import 'package:honestorage/models/record.dart';
 import 'package:honestorage/misc/constants.dart';
 import 'package:honestorage/widgets/record.dart';
-
+import 'package:honestorage/blocs/storage/bloc.dart';
+import 'package:honestorage/blocs/storage/state.dart';
 import 'package:honestorage/formats/bank_card.dart';
 import 'package:honestorage/formats/email_address.dart';
 import 'package:honestorage/formats/multiline_text.dart';
@@ -27,8 +29,7 @@ final rec = Record(
 );
 
 class StorageWidget extends StatefulWidget {
-  final List<Record> records;
-  const StorageWidget(this.records, {Key? key}) : super(key: key);
+  const StorageWidget({Key? key}) : super(key: key);
 
   @override
   State<StorageWidget> createState() => _StorageWidgetState();
@@ -37,20 +38,22 @@ class StorageWidget extends StatefulWidget {
 class _StorageWidgetState extends State<StorageWidget> {
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverFillRemaining(
-          hasScrollBody: false,
-          child: ReorderableWrap(
-            spacing: MEDIUM_MARGIN,
-            runSpacing: MEDIUM_MARGIN,
-            alignment: WrapAlignment.spaceEvenly,
-            padding: const EdgeInsets.all(MEDIUM_MARGIN),
-            onReorder: (o, n) => setState(() => widget.records.insert(n, widget.records.removeAt(o))),
-            children: [for (var record in widget.records) RecordWidget(record)],
+    return BlocBuilder<StorageBloc, StorageState>(
+      builder: (context, state) => CustomScrollView(
+        slivers: [
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: ReorderableWrap(
+              spacing: MEDIUM_MARGIN,
+              runSpacing: MEDIUM_MARGIN,
+              alignment: WrapAlignment.spaceEvenly,
+              padding: const EdgeInsets.all(MEDIUM_MARGIN),
+              onReorder: (o, n) => setState(() => state.data.insert(n, state.data.removeAt(o))),
+              children: [for (var i = 0; i < state.data.length; i++) RecordWidget(state.data[i], i)],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

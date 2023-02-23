@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'package:honestorage/misc/constants.dart';
 import 'package:honestorage/models/record.dart';
+import 'package:honestorage/navigation/support.dart';
+import 'package:honestorage/pages/record_view.dart';
 import 'package:honestorage/widgets/entry.dart';
 
 class RecordWidget extends StatelessWidget {
   final Record content;
-
-  const RecordWidget(this.content, {Key? key}) : super(key: key);
+  final int id;
+  const RecordWidget(this.content, this.id, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,18 +24,25 @@ class RecordWidget extends StatelessWidget {
       maxWidth = width / cardsCount - MEDIUM_MARGIN * (cardsCount * 2 + 1);
     }
 
-    return Card(
-      margin: EdgeInsets.zero,
-      child: Container(
-        margin: const EdgeInsets.all(LARGE_MARGIN),
-        constraints: BoxConstraints(maxWidth: maxWidth, minWidth: MIN_RECORD_WIDTH, minHeight: MIN_RECORD_HEIGHT),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(content.title),
-            if (content.note.isNotEmpty) Text(content.note),
-            for (var record in content.entries) EntryWidget(record),
-          ],
+    return GestureDetector(
+      onTap: () => context.delegate.showRecordViewDialog(
+        context: context,
+        name: content.title,
+        builder: (context) => RecordViewPage(id),
+      ),
+      child: Card(
+        margin: EdgeInsets.zero,
+        child: Container(
+          margin: const EdgeInsets.all(LARGE_MARGIN),
+          constraints: BoxConstraints(maxWidth: maxWidth, minWidth: MIN_RECORD_WIDTH, minHeight: MIN_RECORD_HEIGHT),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(content.title),
+              if (content.note.isNotEmpty) Text(content.note),
+              for (var record in content.entries) EntryWidget(record),
+            ],
+          ),
         ),
       ),
     );

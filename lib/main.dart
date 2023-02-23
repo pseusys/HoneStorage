@@ -4,8 +4,7 @@ import 'package:honestorage/blocs/cache/bloc.dart';
 import 'package:honestorage/repositories/cache.dart';
 
 import 'package:honestorage/repositories/backup.dart';
-import 'package:honestorage/navigation/information_provider.dart';
-import 'package:honestorage/navigation/router_delegate.dart';
+import 'package:honestorage/navigation/delegate.dart';
 
 void main() => runApp(Root());
 
@@ -31,7 +30,6 @@ class Root extends StatelessWidget {
             primarySwatch: Colors.blue,
           ),
           routerDelegate: HonestRouterDelegate(),
-          routeInformationParser: HonestRouteInformationParser(),
         ),
       ),
     );
