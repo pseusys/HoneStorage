@@ -9,8 +9,8 @@ class HonestRouteInformationParser extends RouteInformationParser<HoneState> {
     // Handle '/'
     if (Rout.INITIAL.prefixes.any((e) => uri.toString().startsWith(e))) return HoneState.initial();
 
-    // Handle '/dataset'
-    if (Rout.DATASET.prefixes.any((e) => uri.toString().startsWith(e))) return HoneState.dataset();
+    // Handle '/storage'
+    if (Rout.STORAGE.prefixes.any((e) => uri.toString().startsWith(e))) return HoneState.storage();
 
     // Handle '/view'
     if (Rout.VIEW_RECORD.prefixes.any((e) => uri.toString().startsWith(e))) {
@@ -31,8 +31,8 @@ class HonestRouteInformationParser extends RouteInformationParser<HoneState> {
 
   @override
   RouteInformation restoreRouteInformation(HoneState configuration) {
-    if (configuration.rout == Rout.DATASET) {
-      return RouteInformation(location: HoneState.dataset().uri.path);
+    if (configuration.rout == Rout.STORAGE) {
+      return RouteInformation(location: HoneState.storage().uri.path);
     } else if (configuration.rout == Rout.VIEW_RECORD) {
       return RouteInformation(location: HoneState.recordView(configuration.id).uri.path);
     } else if (configuration.rout == Rout.EDIT_RECORD) {

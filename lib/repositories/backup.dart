@@ -1,16 +1,16 @@
-import 'package:honestorage/models/dataset.dart';
+import 'package:honestorage/models/storage.dart';
 
 abstract class BackupBackend {
   bool get synchronized => false;
-  Stream<Dataset> get dataset;
-  void synchronize(Dataset dataset);
+  Stream<Storage> get storage;
+  void synchronize(Storage storage);
 }
 
 class BackupRepository {
   BackupBackend? _backend;
 
   bool get synchronized => _backend != null;
-  Stream<Dataset> get dataset => _backend?.dataset ?? const Stream.empty();
+  Stream<Storage> get storage => _backend?.storage ?? const Stream.empty();
 
-  void synchronize(Dataset dataset) => _backend?.synchronize ?? {throw UnimplementedError("Backup repository not synchronized!")};
+  void synchronize(Storage storage) => _backend?.synchronize ?? {throw UnimplementedError("Backup repository not synchronized!")};
 }

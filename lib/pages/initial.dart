@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:honestorage/blocs/cache/bloc.dart';
 import 'package:honestorage/blocs/cache/event.dart';
 
-import 'package:honestorage/models/dataset.dart';
+import 'package:honestorage/models/storage.dart';
 
 class InitialPage extends StatelessWidget {
   static const String title = 'Welcome to HoneStorage!';
@@ -26,8 +26,8 @@ class InitialPage extends StatelessWidget {
             ),
             const Text("Init app"),
             TextButton(
-              onPressed: () => context.read<CacheBloc>().add(CacheDecrypted(Dataset.create())),
-              child: const Text("Create dataset"),
+              onPressed: () => context.read<CacheBloc>().add(CacheDecrypted(Storage.create())),
+              child: const Text("Create storage"),
             ),
           ],
         ),

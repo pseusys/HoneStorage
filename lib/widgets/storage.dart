@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:honestorage/blocs/dataset/bloc.dart';
-import 'package:honestorage/blocs/dataset/state.dart';
 import 'package:reorderables/reorderables.dart';
 
 import 'package:honestorage/models/record.dart';
@@ -29,15 +26,15 @@ final rec = Record(
   ],
 );
 
-class DatasetWidget extends StatefulWidget {
+class StorageWidget extends StatefulWidget {
   final List<Record> records;
-  const DatasetWidget(this.records, {Key? key}) : super(key: key);
+  const StorageWidget(this.records, {Key? key}) : super(key: key);
 
   @override
-  State<DatasetWidget> createState() => _DatasetWidgetState();
+  State<StorageWidget> createState() => _StorageWidgetState();
 }
 
-class _DatasetWidgetState extends State<DatasetWidget> {
+class _StorageWidgetState extends State<StorageWidget> {
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(

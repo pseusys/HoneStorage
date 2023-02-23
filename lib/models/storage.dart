@@ -5,12 +5,12 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:honestorage/misc/convertors.dart';
 import 'package:honestorage/models/record.dart';
 
-part 'dataset.g.dart';
+part 'storage.g.dart';
 
 enum Encoding { PIN_CODE, PASSWORD, NONE }
 
 @JsonSerializable()
-class Dataset {
+class Storage {
   @JsonKey(name: 'name')
   final String name;
   @JsonKey(name: 'encoding')
@@ -20,17 +20,17 @@ class Dataset {
   @JsonKey(name: 'data', toJson: toNull, fromJson: emptyList, includeIfNull: false)
   final List<Record> data;
 
-  Dataset(this.name, this.encoding, this.signature) : data = [];
-  factory Dataset.create() => Dataset("New Dataset", Encoding.NONE.name, "");
+  Storage(this.name, this.encoding, this.signature) : data = [];
+  factory Storage.create() => Storage("New Storage", Encoding.NONE.name, "");
 
-  Dataset fromJson(Map<String, dynamic> json) {
-    Dataset parsed = _$DatasetFromJson(json);
+  Storage fromJson(Map<String, dynamic> json) {
+    Storage parsed = _$StorageFromJson(json);
     parsed.data;
     return parsed;
   }
 
   Map<String, dynamic> toJson() {
-    var fields = _$DatasetToJson(this);
+    var fields = _$StorageToJson(this);
     fields['encrypted'] = "";
     return fields;
   }

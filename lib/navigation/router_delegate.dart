@@ -6,9 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:honestorage/blocs/cache/bloc.dart';
 import 'package:honestorage/blocs/cache/event.dart';
 import 'package:honestorage/blocs/cache/state.dart';
-import 'package:honestorage/blocs/dataset/bloc.dart';
+import 'package:honestorage/blocs/storage/bloc.dart';
 import 'package:honestorage/navigation/app_state.dart';
-import 'package:honestorage/pages/dataset.dart';
+import 'package:honestorage/pages/storage.dart';
 import 'package:honestorage/pages/splash.dart';
 import 'package:honestorage/pages/initial.dart';
 import 'package:honestorage/pages/unknown.dart';
@@ -30,14 +30,14 @@ class HonestRouterDelegate extends RouterDelegate<HoneState> with ChangeNotifier
     } else if (state.cacheString != null) {
       context.read<CacheBloc>().add(CacheDecrypted(json.decode(state.cacheString!)));
       // TODO: cache decryption page
-      // context.read<BackupBloc>().add(BackupDecrypted(dataset)); // To decrypt dataset
+      // context.read<BackupBloc>().add(BackupDecrypted(storage)); // To decrypt storage
       // context.read<BackupBloc>().add(BackupSet(null)); // To remove cache
-    } else if (state.dataset == null) {
+    } else if (state.cacheStorage == null) {
       pages.add(const MaterialPage(key: InitialPage.value, child: InitialPage()));
-      // context.read<BackupBloc>().add(BackupDecrypted(dataset)); // To create new dataset
+      // context.read<BackupBloc>().add(BackupDecrypted(storage)); // To create new storage
       // context.read<BackupBloc>().add(BackupSet(backup)); // To locad from backend
     } else {
-      pages.add(const MaterialPage(key: DatasetPage.value, child: DatasetPage()));
+      pages.add(const MaterialPage(key: StoragePage.value, child: StoragePage()));
       if (currentState.rout == Rout.VIEW_RECORD) {
         if (currentState.id != null) {
           //pages.add(MaterialPage(key: ValueKey('BookListPageId${currentState.id}'), child: BookDetailsScreen(book: books[currentState.id])));
@@ -58,8 +58,8 @@ class HonestRouterDelegate extends RouterDelegate<HoneState> with ChangeNotifier
     } else if (currentState.rout == Rout.EDIT_RECORD && currentState.id != null) {
       currentState = HoneState.recordView(currentState.id);
     } else if (currentState.rout == Rout.EDIT_RECORD || currentState.rout == Rout.VIEW_RECORD) {
-      currentState = HoneState.dataset();
-    } else if (currentState.rout == Rout.DATASET) {
+      currentState = HoneState.storage();
+    } else if (currentState.rout == Rout.STORAGE) {
       currentState = HoneState.initial();
     } else {
       currentState = HoneState.unknown();
@@ -81,9 +81,9 @@ class HonestRouterDelegate extends RouterDelegate<HoneState> with ChangeNotifier
   Widget build(BuildContext context) {
     return BlocBuilder<CacheBloc, CacheState>(
       builder: (context, state) {
-        if (state.dataset == null) return _createNavigator(context, state);
-        return BlocProvider<DatasetBloc>(
-          create: (ctx) => DatasetBloc(ctx.read<BackupRepository>(), state.dataset!),
+        if (state.cacheStorage == null) return _createNavigator(context, state);
+        return BlocProvider<StorageBloc>(
+          create: (ctx) => StorageBloc(ctx.read<BackupRepository>(), state.cacheStorage!),
           child: _createNavigator(context, state),
         );
       },

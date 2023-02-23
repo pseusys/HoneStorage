@@ -2,7 +2,7 @@
 
 enum Rout {
   INITIAL(['/']),
-  DATASET(['/records']),
+  STORAGE(['/records']),
   VIEW_RECORD(['/view']),
   EDIT_RECORD(['/add', '/edit']),
   UNKNOWN(['/unknown']);
@@ -21,8 +21,8 @@ class HoneState {
         uri = Uri(path: "/"),
         id = null;
 
-  HoneState.dataset()
-      : rout = Rout.DATASET,
+  HoneState.storage()
+      : rout = Rout.STORAGE,
         uri = Uri(path: "/records"),
         id = null;
 

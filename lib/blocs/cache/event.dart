@@ -1,4 +1,4 @@
-import 'package:honestorage/models/dataset.dart';
+import 'package:honestorage/models/storage.dart';
 
 abstract class CacheEvent {
   const CacheEvent();
@@ -10,11 +10,11 @@ class CacheLoaded extends CacheEvent {
 }
 
 class CacheDecrypted extends CacheEvent {
-  final Dataset? dataset;
-  const CacheDecrypted(this.dataset);
+  final Storage? current;
+  const CacheDecrypted(this.current);
 }
 
 class CacheSet extends CacheEvent {
-  final Dataset? dataset;
-  const CacheSet(this.dataset);
+  final Storage? current;
+  const CacheSet(this.current);
 }

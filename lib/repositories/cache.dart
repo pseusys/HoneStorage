@@ -3,20 +3,20 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CacheRepository {
-  static const _DATASET_KEY = "dataset";
+  static const _STORAGE_KEY = "storage";
 
   Future<String?> getCache() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_DATASET_KEY);
+    return prefs.getString(_STORAGE_KEY);
   }
 
-  Future<String?> setCache(String? dataset) async {
+  Future<String?> setCache(String? storage) async {
     final prefs = await SharedPreferences.getInstance();
-    if (dataset != null) {
-      prefs.setString(_DATASET_KEY, dataset);
+    if (storage != null) {
+      prefs.setString(_STORAGE_KEY, storage);
     } else {
-      prefs.remove(_DATASET_KEY);
+      prefs.remove(_STORAGE_KEY);
     }
-    return dataset;
+    return storage;
   }
 }
