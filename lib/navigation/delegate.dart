@@ -8,6 +8,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:honestorage/blocs/cache/bloc.dart';
 import 'package:honestorage/blocs/cache/event.dart';
 import 'package:honestorage/blocs/cache/state.dart';
+import 'package:honestorage/navigation/paging.dart';
+import 'package:honestorage/pages/record_edit.dart';
+import 'package:honestorage/pages/record_view.dart';
 import 'package:honestorage/pages/storage.dart';
 import 'package:honestorage/pages/splash.dart';
 import 'package:honestorage/pages/initial.dart';
@@ -79,41 +82,19 @@ class HonestRouterDelegate extends RouterDelegate<HonestRoute> with ChangeNotifi
   @override
   Future<void> setNewRoutePath(HonestRoute configuration) async => currentState = configuration;
 
-  Widget _makeDialog(BuildContext context, double width, double height, Widget Function(BuildContext context) builder) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).shadowColor.withAlpha(25),
-      body: Center(
-        child: Container(
-          width: width / 2,
-          height: height / 2,
-          color: Theme.of(context).scaffoldBackgroundColor,
-          child: builder.call(context),
-        ),
-      ),
-    );
+  void showRecordViewDialog(BuildContext context, String name, int index) {
+    action(context) => IconButton(
+          icon: const Icon(Icons.edit),
+          onPressed: () => showRecordEditDialog(context, index),
+        );
+    showRecordDialog(context, name, RecordViewPage(index), action);
   }
 
-  Widget _makePage(BuildContext context, String name, Widget Function(BuildContext context) builder) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(name),
-      ),
-      body: builder.call(context),
-    );
-  }
-
-  void showRecordViewDialog({required BuildContext context, required String name, required Widget Function(BuildContext context) builder}) {
-    final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
-    showGeneralDialog(
-      context: context,
-      pageBuilder: (context, animation, secondaryAnimation) {
-        if (width > height) {
-          return _makeDialog(context, width, height, builder);
-        } else {
-          return _makePage(context, name, builder);
-        }
-      },
-    );
+  void showRecordEditDialog(BuildContext context, int index) {
+    action(context) => IconButton(
+          icon: const Icon(Icons.save),
+          onPressed: () => Navigator.pop(context),
+        );
+    showRecordDialog(context, "Edit record", RecordEditPage(index), action);
   }
 }

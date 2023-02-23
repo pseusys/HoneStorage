@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:honestorage/misc/constants.dart';
 import 'package:honestorage/models/record.dart';
 import 'package:honestorage/navigation/support.dart';
-import 'package:honestorage/pages/record_view.dart';
 import 'package:honestorage/widgets/entry.dart';
 
 class RecordWidget extends StatelessWidget {
@@ -25,11 +24,7 @@ class RecordWidget extends StatelessWidget {
     }
 
     return GestureDetector(
-      onTap: () => context.delegate.showRecordViewDialog(
-        context: context,
-        name: content.title,
-        builder: (context) => RecordViewPage(id),
-      ),
+      onTap: () => context.delegate.showRecordViewDialog(context, content.title, id),
       child: Card(
         margin: EdgeInsets.zero,
         child: Container(
@@ -40,7 +35,7 @@ class RecordWidget extends StatelessWidget {
             children: [
               Text(content.title),
               if (content.note.isNotEmpty) Text(content.note),
-              for (var record in content.entries) EntryWidget(record),
+              for (var entry in content.entries) EntryWidget(entry),
             ],
           ),
         ),
