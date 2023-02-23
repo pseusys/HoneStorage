@@ -27,8 +27,8 @@ class HonestRouterDelegate extends RouterDelegate<HoneState> with ChangeNotifier
     if (state.loading) {
       pages.add(const MaterialPage(key: SplashPage.value, child: SplashPage()));
       // Will emit next state automatically
-    } else if (state.datasetCache != null) {
-      context.read<BackupBloc>().add(BackupDecrypted(json.decode(state.datasetCache!)));
+    } else if (state.serial != null) {
+      context.read<BackupBloc>().add(BackupDecrypted(json.decode(state.serial!)));
       // TODO: cache decryption page
       // context.read<BackupBloc>().add(BackupDecrypted(dataset)); // To decrypt dataset
       // context.read<BackupBloc>().add(BackupSet(null)); // To remove cache
