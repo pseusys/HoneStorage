@@ -3,16 +3,16 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:honestorage/blocs/backup/bloc.dart';
-import 'package:honestorage/blocs/backup/event.dart';
-import 'package:honestorage/blocs/backup/state.dart';
+import 'package:honestorage/blocs/cache/bloc.dart';
+import 'package:honestorage/blocs/cache/event.dart';
+import 'package:honestorage/blocs/cache/state.dart';
 import 'package:honestorage/blocs/dataset/bloc.dart';
 import 'package:honestorage/navigation/app_state.dart';
 import 'package:honestorage/pages/dataset.dart';
 import 'package:honestorage/pages/splash.dart';
 import 'package:honestorage/pages/initial.dart';
 import 'package:honestorage/pages/unknown.dart';
-import 'package:honestorage/repositories/remote.dart';
+import 'package:honestorage/repositories/backup.dart';
 
 class HonestRouterDelegate extends RouterDelegate<HoneState> with ChangeNotifier, PopNavigatorRouterDelegateMixin<HoneState> {
   @override
@@ -22,13 +22,13 @@ class HonestRouterDelegate extends RouterDelegate<HoneState> with ChangeNotifier
 
   HonestRouterDelegate() : navigatorKey = GlobalKey<NavigatorState>();
 
-  List<Page<dynamic>> buildPage(BuildContext context, BackupState state) {
+  List<Page<dynamic>> buildPage(BuildContext context, CacheState state) {
     List<Page<dynamic>> pages = [];
     if (state.loading) {
       pages.add(const MaterialPage(key: SplashPage.value, child: SplashPage()));
       // Will emit next state automatically
-    } else if (state.serial != null) {
-      context.read<BackupBloc>().add(BackupDecrypted(json.decode(state.serial!)));
+    } else if (state.cacheString != null) {
+      context.read<CacheBloc>().add(CacheDecrypted(json.decode(state.cacheString!)));
       // TODO: cache decryption page
       // context.read<BackupBloc>().add(BackupDecrypted(dataset)); // To decrypt dataset
       // context.read<BackupBloc>().add(BackupSet(null)); // To remove cache
@@ -68,7 +68,7 @@ class HonestRouterDelegate extends RouterDelegate<HoneState> with ChangeNotifier
     return true;
   }
 
-  Navigator _createNavigator(BuildContext context, BackupState state) {
+  Navigator _createNavigator(BuildContext context, CacheState state) {
     return Navigator(
       key: navigatorKey,
       //transitionDelegate: AnimationTransitionDelegate(),
@@ -79,11 +79,11 @@ class HonestRouterDelegate extends RouterDelegate<HoneState> with ChangeNotifier
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BackupBloc, BackupState>(
+    return BlocBuilder<CacheBloc, CacheState>(
       builder: (context, state) {
         if (state.dataset == null) return _createNavigator(context, state);
         return BlocProvider<DatasetBloc>(
-          create: (ctx) => DatasetBloc(ctx.read<RemoteRepository>(), state.dataset!),
+          create: (ctx) => DatasetBloc(ctx.read<BackupRepository>(), state.dataset!),
           child: _createNavigator(context, state),
         );
       },
