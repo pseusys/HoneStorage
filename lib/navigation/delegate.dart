@@ -9,8 +9,8 @@ import 'package:honestorage/blocs/cache/bloc.dart';
 import 'package:honestorage/blocs/cache/event.dart';
 import 'package:honestorage/blocs/cache/state.dart';
 import 'package:honestorage/navigation/paging.dart';
-import 'package:honestorage/pages/record_edit.dart';
-import 'package:honestorage/pages/record_view.dart';
+import 'package:honestorage/pages/edit.dart';
+import 'package:honestorage/pages/view.dart';
 import 'package:honestorage/pages/storage.dart';
 import 'package:honestorage/pages/splash.dart';
 import 'package:honestorage/pages/initial.dart';
@@ -82,19 +82,25 @@ class HonestRouterDelegate extends RouterDelegate<HonestRoute> with ChangeNotifi
   @override
   Future<void> setNewRoutePath(HonestRoute configuration) async => currentState = configuration;
 
-  void showRecordViewDialog(BuildContext context, String name, int index) {
-    action(context) => IconButton(
+  void showRecordViewDialog(BuildContext context, String name, int index, {bool second = false}) => showRecordDialog(
+        context,
+        name,
+        RecordViewPage(index),
+        second,
+        (context) => IconButton(
           icon: const Icon(Icons.edit),
-          onPressed: () => showRecordEditDialog(context, index),
-        );
-    showRecordDialog(context, name, RecordViewPage(index), action);
-  }
+          onPressed: () => showRecordEditDialog(context, index, second: true),
+        ),
+      );
 
-  void showRecordEditDialog(BuildContext context, int index) {
-    action(context) => IconButton(
+  void showRecordEditDialog(BuildContext context, int index, {bool second = false}) => showRecordDialog(
+        context,
+        "Edit record",
+        RecordEditPage(index),
+        second,
+        (context) => IconButton(
           icon: const Icon(Icons.save),
           onPressed: () => Navigator.pop(context),
-        );
-    showRecordDialog(context, "Edit record", RecordEditPage(index), action);
-  }
+        ),
+      );
 }
