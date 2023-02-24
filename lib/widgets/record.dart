@@ -35,7 +35,7 @@ class RecordWidget extends StatelessWidget {
             children: [
               Text(content.title),
               if (content.note.isNotEmpty) Text(content.note),
-              for (var entry in content.entries) EntryWidget(entry),
+              for (var entry in content.entries) EntryStorageWidget(entry),
             ],
           ),
         ),

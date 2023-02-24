@@ -25,7 +25,13 @@ class RecordAdded extends StorageEvent {
   const RecordAdded(this.current);
 }
 
-class RecordRemoved extends StorageEvent {
+class RecordChanged extends StorageEvent {
+  final int index;
   final Record current;
-  const RecordRemoved(this.current);
+  const RecordChanged(this.index, this.current);
+}
+
+class RecordRemoved extends StorageEvent {
+  final int index;
+  const RecordRemoved(this.index);
 }

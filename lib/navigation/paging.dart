@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-void showRecordDialog(BuildContext context, String name, Widget dialog, bool showBarrier, Widget Function(BuildContext context)? action) {
+void showRecordDialog(BuildContext context, String name, Widget dialog, bool showBarrier, List<IconButton>? actions) {
   final width = MediaQuery.of(context).size.width;
   final height = MediaQuery.of(context).size.height;
   showGeneralDialog(
@@ -8,16 +8,17 @@ void showRecordDialog(BuildContext context, String name, Widget dialog, bool sho
     barrierColor: showBarrier ? Colors.black54 : Colors.transparent,
     pageBuilder: (context, animation, secondaryAnimation) {
       if (width > height) {
-        return _makeDialog(context, name, width / 2, height / 2, dialog, action);
+        return _makeDialog(context, name, width / 2, height / 2, dialog, actions);
       } else {
-        return _makePage(context, name, dialog, action);
+        return _makePage(context, name, dialog, actions);
       }
     },
   );
 }
 
-Widget _makeDialog(BuildContext context, String name, double width, double height, Widget content, Widget Function(BuildContext context)? builder) {
+Widget _makeDialog(BuildContext context, String name, double width, double height, Widget content, List<IconButton>? actions) {
   return Scaffold(
+    backgroundColor: Colors.transparent,
     body: Center(
       child: SizedBox(
         width: width,
@@ -28,7 +29,7 @@ Widget _makeDialog(BuildContext context, String name, double width, double heigh
             children: [
               AppBar(
                 title: Text(name),
-                actions: [if (builder != null) builder.call(context)],
+                actions: [if (actions != null) ...actions],
               ),
               content,
             ],
@@ -39,11 +40,11 @@ Widget _makeDialog(BuildContext context, String name, double width, double heigh
   );
 }
 
-Widget _makePage(BuildContext context, String name, Widget content, Widget Function(BuildContext context)? builder) {
+Widget _makePage(BuildContext context, String name, Widget content, List<IconButton>? actions) {
   return Scaffold(
     appBar: AppBar(
       title: Text(name),
-      actions: [if (builder != null) builder.call(context)],
+      actions: [if (actions != null) ...actions],
     ),
     body: content,
   );

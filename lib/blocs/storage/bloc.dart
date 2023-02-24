@@ -16,7 +16,8 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
     on<NameChanged>((event, emit) => emit(state.copyWith(name: event.current)));
     on<EncodingChanged>((event, emit) => emit(state.copyWith(encoding: event.current)));
     on<RecordAdded>((event, emit) => emit(state.addRecord(event.current)));
-    on<RecordRemoved>((event, emit) => emit(state.removeRecord(event.current)));
+    on<RecordChanged>((event, emit) => emit(state.addRecord(event.current)));
+    on<RecordRemoved>((event, emit) => emit(state.removeRecord(event.index)));
 
     _storageSubscription = _backupRepository.storage.listen((current) => add(StorageChanged(current)));
   }
