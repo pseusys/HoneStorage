@@ -10,7 +10,7 @@ class PlainTextFormat extends Format {
   bool get numerical => false;
 
   @override
-  String viewPrivate(String value) => "[plain text]";
+  String viewPrivate(String value) => "[line]";
 
   @override
   String viewProtected(String value) => value;

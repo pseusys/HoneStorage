@@ -82,22 +82,22 @@ class HonestRouterDelegate extends RouterDelegate<HonestRoute> with ChangeNotifi
   @override
   Future<void> setNewRoutePath(HonestRoute configuration) async => currentState = configuration;
 
-  void showRecordViewDialog(BuildContext context, String name, int index, {bool second = false}) => showRecordDialog(
+  void showRecordViewDialog(BuildContext context, String name, int index, {bool showBarrier = true}) => showRecordDialog(
         context,
         name,
         RecordViewPage(index),
-        second,
+        showBarrier,
         (context) => IconButton(
           icon: const Icon(Icons.edit),
-          onPressed: () => showRecordEditDialog(context, index, second: true),
+          onPressed: () => showRecordEditDialog(context, index, showBarrier: false),
         ),
       );
 
-  void showRecordEditDialog(BuildContext context, int index, {bool second = false}) => showRecordDialog(
+  void showRecordEditDialog(BuildContext context, int index, {bool showBarrier = true}) => showRecordDialog(
         context,
         "Edit record",
         RecordEditPage(index),
-        second,
+        showBarrier,
         (context) => IconButton(
           icon: const Icon(Icons.save),
           onPressed: () => Navigator.pop(context),

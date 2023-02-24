@@ -10,7 +10,7 @@ class MultilineTextFormat extends Format {
   bool get numerical => false;
 
   @override
-  String viewPrivate(String value) => "[multiline text]";
+  String viewPrivate(String value) => "[text]";
 
   @override
   String viewProtected(String value) => value;

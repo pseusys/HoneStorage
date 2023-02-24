@@ -29,7 +29,7 @@ class RecordWidget extends StatelessWidget {
         margin: EdgeInsets.zero,
         child: Container(
           margin: const EdgeInsets.all(LARGE_MARGIN),
-          constraints: BoxConstraints(maxWidth: maxWidth, minWidth: MIN_RECORD_WIDTH, minHeight: MIN_RECORD_HEIGHT),
+          constraints: BoxConstraints(maxWidth: maxWidth > MIN_RECORD_WIDTH ? maxWidth : double.infinity, minHeight: MIN_RECORD_HEIGHT),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

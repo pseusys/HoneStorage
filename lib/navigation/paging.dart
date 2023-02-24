@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
-void showRecordDialog(BuildContext context, String name, Widget dialog, bool second, Widget Function(BuildContext ctx)? action) {
+void showRecordDialog(BuildContext context, String name, Widget dialog, bool showBarrier, Widget Function(BuildContext context)? action) {
   final width = MediaQuery.of(context).size.width;
   final height = MediaQuery.of(context).size.height;
   showGeneralDialog(
     context: context,
+    barrierColor: showBarrier ? Colors.black54 : Colors.transparent,
     pageBuilder: (context, animation, secondaryAnimation) {
       if (width > height) {
-        return _makeDialog(context, name, width / 2, height / 2, second, dialog, action);
+        return _makeDialog(context, name, width / 2, height / 2, dialog, action);
       } else {
         return _makePage(context, name, dialog, action);
       }
@@ -15,13 +16,12 @@ void showRecordDialog(BuildContext context, String name, Widget dialog, bool sec
   );
 }
 
-Widget _makeDialog(BuildContext context, String name, double w, double h, bool second, Widget content, Widget Function(BuildContext ctx)? builder) {
+Widget _makeDialog(BuildContext context, String name, double width, double height, Widget content, Widget Function(BuildContext context)? builder) {
   return Scaffold(
-    backgroundColor: second ? Colors.transparent : Theme.of(context).shadowColor.withAlpha(25),
     body: Center(
       child: SizedBox(
-        width: w,
-        height: h,
+        width: width,
+        height: height,
         child: Card(
           color: Theme.of(context).scaffoldBackgroundColor,
           child: Column(
@@ -39,7 +39,7 @@ Widget _makeDialog(BuildContext context, String name, double w, double h, bool s
   );
 }
 
-Widget _makePage(BuildContext context, String name, Widget content, Widget Function(BuildContext ctx)? builder) {
+Widget _makePage(BuildContext context, String name, Widget content, Widget Function(BuildContext context)? builder) {
   return Scaffold(
     appBar: AppBar(
       title: Text(name),
