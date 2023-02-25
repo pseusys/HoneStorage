@@ -7,7 +7,7 @@ const MEDIUM_MARGIN = 10.0;
 const LARGE_MARGIN = 15.0;
 
 const MIN_RECORD_WIDTH = 150.0;
-const MIN_RECORD_HEIGHT = 150.0;
+const MIN_RECORD_HEIGHT = 25.0;
 
 final theme = ThemeData(
   // Define the default brightness and colors.

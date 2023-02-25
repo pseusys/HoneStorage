@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:honestorage/misc/constants.dart';
 import 'package:honestorage/models/record.dart';
+import 'package:honestorage/navigation/delegate.dart';
 import 'package:honestorage/navigation/support.dart';
 import 'package:honestorage/widgets/entry.dart';
 
@@ -24,7 +25,7 @@ class RecordWidget extends StatelessWidget {
     }
 
     return GestureDetector(
-      onTap: () => context.delegate.showRecordViewDialog(context, content.title, id),
+      onTap: () => context.delegate.showRecordViewEditDialog(context, id, content),
       child: Card(
         margin: EdgeInsets.zero,
         child: Container(
@@ -34,7 +35,6 @@ class RecordWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(content.title),
-              if (content.note.isNotEmpty) Text(content.note),
               for (var entry in content.entries) EntryStorageWidget(entry),
             ],
           ),

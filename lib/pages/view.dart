@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+
+import 'package:honestorage/misc/constants.dart';
+import 'package:honestorage/models/record.dart';
+import 'package:honestorage/widgets/entry.dart';
 
 class RecordViewPage extends StatelessWidget {
-  static const route = "/record_view";
-
   final int id;
-  RecordViewPage(this.id) : super(key: ValueKey('RecordViewPageId$id'));
-  ValueKey get value => key as ValueKey;
+  final Record content;
+  RecordViewPage(this.id, this.content) : super(key: ValueKey('RecordViewPageId$id'));
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Text('This is a nice overlay $id'),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(SMALL_MARGIN),
+      child: Column(
+        children: [
+          if (content.note.isNotEmpty) MarkdownBody(data: content.note),
+          for (var entry in content.entries) EntryRecordWidget(entry),
+        ],
+      ),
     );
   }
 }

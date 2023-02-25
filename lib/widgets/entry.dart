@@ -30,7 +30,7 @@ class EntryRecordWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(content.name),
-        Text(content.private),
+        Text(content.protected),
       ],
     );
   }

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-class RecordEditPage extends StatelessWidget {
-  static const route = "/record_view";
+import 'package:honestorage/models/record.dart';
 
+class RecordEditPage extends StatelessWidget {
   final int id;
-  RecordEditPage(this.id) : super(key: ValueKey('RecordEditPageId$id'));
-  ValueKey get value => key as ValueKey;
+  final Record content;
+  RecordEditPage(this.id, this.content) : super(key: ValueKey('RecordEditPageId$id'));
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: <Widget>[
+      children: [
         Text('This is a nice overlay $id'),
       ],
     );

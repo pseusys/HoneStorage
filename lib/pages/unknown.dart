@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:honestorage/misc/cowsay.dart';
+
 class UnknownPage extends StatelessWidget {
-  static const String title = 'HoneStorage: Routing error!';
+  static const title = 'HoneStorage: Routing error!';
   static const value = ValueKey('UnknownPage');
   const UnknownPage() : super(key: value);
 
@@ -11,7 +13,9 @@ class UnknownPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(UnknownPage.title),
       ),
-      body: Column(),
+      body: Center(
+        child: Text(createMessage("Bzzzz... Nothing to find here...")),
+      ),
     );
   }
 }

@@ -10,13 +10,15 @@ import 'package:honestorage/blocs/cache/event.dart';
 import 'package:honestorage/blocs/cache/state.dart';
 import 'package:honestorage/blocs/storage/bloc.dart';
 import 'package:honestorage/blocs/storage/event.dart';
-import 'package:honestorage/navigation/paging.dart';
+import 'package:honestorage/models/record.dart';
+import 'package:honestorage/navigation/interface.dart';
 import 'package:honestorage/pages/edit.dart';
-import 'package:honestorage/pages/view.dart';
 import 'package:honestorage/pages/storage.dart';
 import 'package:honestorage/pages/splash.dart';
 import 'package:honestorage/pages/initial.dart';
 import 'package:honestorage/pages/unknown.dart';
+
+part 'paging.dart';
 
 enum HonestRoute {
   INITIAL,
@@ -83,27 +85,4 @@ class HonestRouterDelegate extends RouterDelegate<HonestRoute> with ChangeNotifi
 
   @override
   Future<void> setNewRoutePath(HonestRoute configuration) async => currentState = configuration;
-
-  void showRecordViewDialog(BuildContext context, String name, int index, {bool showBarrier = true}) =>
-      showRecordDialog(context, name, RecordViewPage(index), showBarrier, [
-        IconButton(
-          icon: const Icon(Icons.edit),
-          onPressed: () => showRecordEditDialog(context, index, showBarrier: false),
-        ),
-        IconButton(
-          icon: const Icon(Icons.delete),
-          onPressed: () {
-            context.read<StorageBloc>().add(RecordRemoved(index));
-            Navigator.pop(context);
-          },
-        ),
-      ]);
-
-  void showRecordEditDialog(BuildContext context, int index, {bool showBarrier = true}) =>
-      showRecordDialog(context, "Edit record", RecordEditPage(index), showBarrier, [
-        IconButton(
-          icon: const Icon(Icons.save),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ]);
 }

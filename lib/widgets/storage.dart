@@ -17,7 +17,7 @@ import 'package:honestorage/models/entry.dart';
 
 final rec = Record(
   "New Record",
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+  "**Lorem ipsum dolor sit amet**, consectetur adipiscing elit,  \nSed do eiusmod _tempor_ incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
   [
     Entry("Password", "098765", PasswordFormat()),
     Entry("Phone number", "1234567890", PhoneNumberFormat()),
