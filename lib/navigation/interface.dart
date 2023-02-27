@@ -3,26 +3,34 @@ import 'package:honestorage/models/record.dart';
 import 'package:honestorage/pages/edit.dart';
 import 'package:honestorage/pages/view.dart';
 
+typedef InterfaceReturnFunction<T extends Object> = T Function(BuildContext context, void Function() switchState);
+
 class InterfaceWidget extends StatefulWidget {
-  final Record record;
+  // TODO: replace name with name getter function.
+
   final int index;
+  final Record record;
   final String name;
   final String switchName;
   final bool view;
-  final bool backButton;
-  final bool switchBackButton;
-  final List<IconButton> Function(void Function() switchState, RecordViewPage? viewPage, RecordEditPage? editPage)? actions;
-  final List<IconButton> Function(void Function() switchState, RecordViewPage? viewPage, RecordEditPage? editPage)? switchActions;
+  final bool implyBackButton;
+  final bool implySwitchBackButton;
+  final InterfaceReturnFunction<IconButton>? backButton;
+  final InterfaceReturnFunction<IconButton>? switchBackButton;
+  final InterfaceReturnFunction<List<IconButton>>? actions;
+  final InterfaceReturnFunction<List<IconButton>>? switchActions;
 
   InterfaceWidget({
     Key? key,
-    required this.record,
     required this.index,
+    required this.record,
     this.view = true,
     String? name,
     String? switchName,
-    this.backButton = true,
-    this.switchBackButton = true,
+    this.implyBackButton = true,
+    this.implySwitchBackButton = true,
+    this.backButton,
+    this.switchBackButton,
     this.actions,
     this.switchActions,
   })  : name = name ?? record.title,
@@ -37,7 +45,8 @@ class _InterfaceWidgetState extends State<InterfaceWidget> {
   late bool _view;
   late String _name;
   late Widget _payload;
-  late bool _backButton;
+  late bool _implyBackButton;
+  late Widget? _backButton;
   late List<Widget>? _actions;
 
   @override
@@ -54,24 +63,23 @@ class _InterfaceWidgetState extends State<InterfaceWidget> {
   }
 
   void _setupVariables() {
-    Widget? viewPage, editPage;
-    List<IconButton> Function(void Function(), RecordViewPage?, RecordEditPage?)? actionList;
+    InterfaceReturnFunction<IconButton>? backButton;
+    InterfaceReturnFunction<List<IconButton>>? actions;
     if (_view) {
       _name = widget.name;
       _payload = RecordViewPage(widget.index, widget.record);
-      _backButton = widget.backButton;
-      actionList = widget.actions;
-      viewPage = _payload;
-      editPage = null;
+      _implyBackButton = widget.implyBackButton;
+      backButton = widget.backButton;
+      actions = widget.actions;
     } else {
       _name = widget.switchName;
       _payload = RecordEditPage(widget.index, widget.record);
-      _backButton = widget.switchBackButton;
-      actionList = widget.switchActions;
-      viewPage = null;
-      editPage = _payload;
+      _implyBackButton = widget.implySwitchBackButton;
+      backButton = widget.switchBackButton;
+      actions = widget.switchActions;
     }
-    _actions = actionList?.call(() => setState(() => _view = !_view), viewPage as RecordViewPage?, editPage as RecordEditPage?);
+    _backButton = backButton?.call(context, () => setState(() => _view = !_view));
+    _actions = actions?.call(context, () => setState(() => _view = !_view));
   }
 
   @override
@@ -94,7 +102,8 @@ class _InterfaceWidgetState extends State<InterfaceWidget> {
               children: [
                 AppBar(
                   title: Text(_name),
-                  automaticallyImplyLeading: _backButton,
+                  leading: _backButton,
+                  automaticallyImplyLeading: _implyBackButton,
                   actions: [if (_actions != null) ..._actions!],
                 ),
                 SingleChildScrollView(
@@ -112,7 +121,8 @@ class _InterfaceWidgetState extends State<InterfaceWidget> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_name),
-        automaticallyImplyLeading: _backButton,
+        leading: _backButton,
+        automaticallyImplyLeading: _implyBackButton,
         actions: [if (_actions != null) ..._actions!],
       ),
       body: SingleChildScrollView(

@@ -12,12 +12,14 @@ class RecordBloc extends Bloc<RecordEvent, RecordState> {
   final int _index;
   final StorageBloc _storageBloc;
 
-  RecordBloc(this._index, this._storageBloc) : super(const RecordState([])) {
+  RecordBloc(this._index, this._storageBloc) : super(RecordState.copy(_storageBloc.state.data[_index])) {
     on<RecordTitleChanged>(_onTitleChanged);
     on<RecordNoteChanged>(_onNoteChanged);
     on<RecordEntriesChanged>(_onEntriesChanged);
     on<RecordSubmitted>(_onSubmitted);
   }
+
+  int get idx => _index;
 
   void _onTitleChanged(RecordTitleChanged event, Emitter<RecordState> emit) {
     final title = TitleForm.dirty(event.title);

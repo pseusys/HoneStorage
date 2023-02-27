@@ -17,7 +17,7 @@ class RecordViewPage extends StatelessWidget {
       child: Column(
         children: [
           if (content.note.isNotEmpty) MarkdownBody(data: content.note),
-          for (var entry in content.entries) EntryRecordWidget(entry),
+          for (var entry in content.entries) EntryRecordViewWidget(entry),
         ],
       ),
     );

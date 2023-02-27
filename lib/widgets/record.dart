@@ -25,7 +25,7 @@ class RecordWidget extends StatelessWidget {
     }
 
     return GestureDetector(
-      onTap: () => context.delegate.showRecordViewEditDialog(context, id, content),
+      onTap: () => context.delegate.showRecordViewEditDialog(context, id),
       child: Card(
         margin: EdgeInsets.zero,
         child: Container(
