@@ -10,8 +10,8 @@ class InterfaceWidget extends StatefulWidget {
 
   final int index;
   final Record record;
-  final String name;
-  final String switchName;
+  final String Function(BuildContext context) getName;
+  final String Function(BuildContext context) getSwitchName;
   final bool view;
   final bool implyBackButton;
   final bool implySwitchBackButton;
@@ -25,16 +25,16 @@ class InterfaceWidget extends StatefulWidget {
     required this.index,
     required this.record,
     this.view = true,
-    String? name,
-    String? switchName,
+    String Function(BuildContext context)? getName,
+    String Function(BuildContext context)? getSwitchName,
     this.implyBackButton = true,
     this.implySwitchBackButton = true,
     this.backButton,
     this.switchBackButton,
     this.actions,
     this.switchActions,
-  })  : name = name ?? record.title,
-        switchName = switchName ?? "Edit ${record.title}",
+  })  : getName = getName ?? ((_) => record.title),
+        getSwitchName = getSwitchName ?? ((_) => "Edit record"),
         super(key: key);
 
   @override
@@ -66,13 +66,13 @@ class _InterfaceWidgetState extends State<InterfaceWidget> {
     InterfaceReturnFunction<IconButton>? backButton;
     InterfaceReturnFunction<List<IconButton>>? actions;
     if (_view) {
-      _name = widget.name;
+      _name = widget.getName(context);
       _payload = RecordViewPage(widget.index, widget.record);
       _implyBackButton = widget.implyBackButton;
       backButton = widget.backButton;
       actions = widget.actions;
     } else {
-      _name = widget.switchName;
+      _name = widget.getSwitchName(context);
       _payload = RecordEditPage(widget.index, widget.record);
       _implyBackButton = widget.implySwitchBackButton;
       backButton = widget.switchBackButton;

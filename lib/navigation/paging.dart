@@ -59,7 +59,7 @@ extension PageOrDialogSupports on HonestRouterDelegate {
             index: index,
             record: storageBloc.state.data[index],
             view: false,
-            name: 'Add new record',
+            getName: (_) => 'Add new record',
             actions: (context, setState) => [
               IconButton(
                 icon: const Icon(Icons.save),
