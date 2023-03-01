@@ -8,15 +8,12 @@ import 'package:honestorage/blocs/record/bloc.dart';
 import 'package:honestorage/blocs/record/event.dart';
 import 'package:honestorage/blocs/record/state.dart';
 import 'package:honestorage/misc/constants.dart';
-import 'package:honestorage/models/record.dart';
 import 'package:honestorage/widgets/entry.dart';
 
 Function _deepEq = const DeepCollectionEquality().equals;
 
 class RecordEditPage extends StatelessWidget {
-  final int id;
-  final Record record;
-  RecordEditPage(this.id, this.record) : super(key: ValueKey('RecordEditPageId$id'));
+  RecordEditPage(int id) : super(key: ValueKey('RecordEditPageId$id'));
 
   @override
   Widget build(BuildContext context) {

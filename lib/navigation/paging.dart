@@ -13,7 +13,7 @@ extension PageOrDialogSupports on HonestRouterDelegate {
           create: (_) => RecordBloc(index, storageBloc),
           child: InterfaceWidget(
             index: index,
-            record: storageBloc.state.data[index],
+            getName: (BuildContext context) => context.read<RecordBloc>().state.title.value,
             implySwitchBackButton: false,
             actions: (context, setState) => [
               IconButton(
@@ -57,9 +57,9 @@ extension PageOrDialogSupports on HonestRouterDelegate {
           create: (_) => RecordBloc(index, storageBloc),
           child: InterfaceWidget(
             index: index,
-            record: storageBloc.state.data[index],
             view: false,
             getName: (_) => 'Add new record',
+            getSwitchName: (BuildContext context) => context.read<RecordBloc>().state.title.value,
             actions: (context, setState) => [
               IconButton(
                 icon: const Icon(Icons.save),

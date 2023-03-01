@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:honestorage/models/record.dart';
+
 import 'package:honestorage/pages/edit.dart';
 import 'package:honestorage/pages/view.dart';
 
@@ -9,7 +9,6 @@ class InterfaceWidget extends StatefulWidget {
   // TODO: replace name with name getter function.
 
   final int index;
-  final Record record;
   final String Function(BuildContext context) getName;
   final String Function(BuildContext context) getSwitchName;
   final bool view;
@@ -23,7 +22,6 @@ class InterfaceWidget extends StatefulWidget {
   InterfaceWidget({
     Key? key,
     required this.index,
-    required this.record,
     this.view = true,
     String Function(BuildContext context)? getName,
     String Function(BuildContext context)? getSwitchName,
@@ -33,7 +31,7 @@ class InterfaceWidget extends StatefulWidget {
     this.switchBackButton,
     this.actions,
     this.switchActions,
-  })  : getName = getName ?? ((_) => record.title),
+  })  : getName = getName ?? ((_) => "View record"),
         getSwitchName = getSwitchName ?? ((_) => "Edit record"),
         super(key: key);
 
@@ -67,13 +65,13 @@ class _InterfaceWidgetState extends State<InterfaceWidget> {
     InterfaceReturnFunction<List<IconButton>>? actions;
     if (_view) {
       _name = widget.getName(context);
-      _payload = RecordViewPage(widget.index, widget.record);
+      _payload = RecordViewPage(widget.index);
       _implyBackButton = widget.implyBackButton;
       backButton = widget.backButton;
       actions = widget.actions;
     } else {
       _name = widget.getSwitchName(context);
-      _payload = RecordEditPage(widget.index, widget.record);
+      _payload = RecordEditPage(widget.index);
       _implyBackButton = widget.implySwitchBackButton;
       backButton = widget.switchBackButton;
       actions = widget.switchActions;
