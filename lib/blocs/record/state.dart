@@ -9,11 +9,12 @@ class RecordState {
   final NoteForm note;
   final List<EntryForm> entries;
 
-  const RecordState(this.entries, {this.status = FormzStatus.pure, this.title = const TitleForm.pure(), this.note = const NoteForm.pure()});
+  const RecordState._(this.entries, {this.status = FormzStatus.pure, this.title = const TitleForm.pure(), this.note = const NoteForm.pure()});
   factory RecordState.copy(Record record) =>
-      RecordState(record.entries.map((e) => EntryForm.dirty(e)).toList(), title: TitleForm.dirty(record.title), note: NoteForm.dirty(record.note));
+      RecordState._(record.entries.map((e) => EntryForm.dirty(e)).toList(), title: TitleForm.dirty(record.title), note: NoteForm.dirty(record.note));
+  factory RecordState.create() => const RecordState._([], title: TitleForm.dirty(), note: NoteForm.dirty());
 
-  RecordState copyWith({FormzStatus? status, TitleForm? title, NoteForm? note, List<EntryForm>? entries}) => RecordState(
+  RecordState copyWith({FormzStatus? status, TitleForm? title, NoteForm? note, List<EntryForm>? entries}) => RecordState._(
         entries ?? this.entries,
         status: status ?? this.status,
         title: title ?? this.title,

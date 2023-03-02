@@ -1,8 +1,6 @@
 part of 'delegate.dart';
 
 extension PageOrDialogSupports on HonestRouterDelegate {
-  // TODO: generalize build functions
-
   void showRecordViewEditDialog(BuildContext context, int index) {
     final storageBloc = context.read<StorageBloc>();
     showGeneralDialog(
@@ -10,7 +8,7 @@ extension PageOrDialogSupports on HonestRouterDelegate {
       useRootNavigator: false,
       pageBuilder: (ctx, animation, secondaryAnimation) {
         return BlocProvider(
-          create: (_) => RecordBloc(index, storageBloc),
+          create: (_) => RecordBloc.copy(index, storageBloc),
           child: InterfaceWidget(
             index: index,
             getName: (BuildContext context) => context.read<RecordBloc>().state.title.value,
@@ -47,38 +45,31 @@ extension PageOrDialogSupports on HonestRouterDelegate {
     );
   }
 
-  void showRecordAddDialog(BuildContext context, int index) {
+  void showRecordAddDialog(BuildContext context) {
     final storageBloc = context.read<StorageBloc>();
     showGeneralDialog(
       context: context,
       useRootNavigator: false,
       pageBuilder: (ctx, animation, secondaryAnimation) {
         return BlocProvider(
-          create: (_) => RecordBloc(index, storageBloc),
+          create: (_) => RecordBloc.create(storageBloc),
           child: InterfaceWidget(
-            index: index,
             view: false,
-            getName: (_) => 'Add new record',
-            getSwitchName: (BuildContext context) => context.read<RecordBloc>().state.title.value,
-            actions: (context, setState) => [
-              IconButton(
-                icon: const Icon(Icons.save),
-                onPressed: setState.call,
-              ),
-            ],
-            switchActions: (context, setState) => [
-              IconButton(
-                icon: const Icon(Icons.edit),
-                onPressed: setState.call,
-              ),
-              IconButton(
-                icon: const Icon(Icons.delete),
-                onPressed: () {
-                  storageBloc.add(RecordRemoved(index));
-                  Navigator.pop(context);
-                },
-              ),
-            ],
+            getSwitchName: (_) => 'Add new record',
+            switchActions: (context, setState) {
+              final record = context.read<RecordBloc>();
+              return [
+                IconButton(
+                  icon: const Icon(Icons.send),
+                  onPressed: record.state.status.isValid
+                      ? () {
+                          record.add(const RecordSubmitted());
+                          if (record.state.status == FormzStatus.submissionSuccess) Navigator.pop(context);
+                        }
+                      : null,
+                ),
+              ];
+            },
           ),
         );
       },

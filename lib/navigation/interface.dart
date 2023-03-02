@@ -8,7 +8,7 @@ typedef InterfaceReturnFunction<T extends Object> = T Function(BuildContext cont
 class InterfaceWidget extends StatefulWidget {
   // TODO: replace name with name getter function.
 
-  final int index;
+  final int? index;
   final String Function(BuildContext context) getName;
   final String Function(BuildContext context) getSwitchName;
   final bool view;
@@ -21,7 +21,7 @@ class InterfaceWidget extends StatefulWidget {
 
   InterfaceWidget({
     Key? key,
-    required this.index,
+    this.index,
     this.view = true,
     String Function(BuildContext context)? getName,
     String Function(BuildContext context)? getSwitchName,
@@ -65,7 +65,7 @@ class _InterfaceWidgetState extends State<InterfaceWidget> {
     InterfaceReturnFunction<List<IconButton>>? actions;
     if (_view) {
       _name = widget.getName(context);
-      _payload = RecordViewPage(widget.index);
+      _payload = RecordViewPage(widget.index!);
       _implyBackButton = widget.implyBackButton;
       backButton = widget.backButton;
       actions = widget.actions;

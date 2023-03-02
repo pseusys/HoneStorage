@@ -13,7 +13,7 @@ import 'package:honestorage/widgets/entry.dart';
 Function _deepEq = const DeepCollectionEquality().equals;
 
 class RecordEditPage extends StatelessWidget {
-  RecordEditPage(int id) : super(key: ValueKey('RecordEditPageId$id'));
+  RecordEditPage(int? id) : super(key: ValueKey(id == null ? 'RecordAddPage' : 'RecordEditPageId$id'));
 
   @override
   Widget build(BuildContext context) {

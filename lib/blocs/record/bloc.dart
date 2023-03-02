@@ -9,17 +9,17 @@ import 'package:honestorage/blocs/storage/event.dart';
 import 'package:honestorage/models/record.dart';
 
 class RecordBloc extends Bloc<RecordEvent, RecordState> {
-  final int _index;
+  final int? _index;
   final StorageBloc _storageBloc;
 
-  RecordBloc(this._index, this._storageBloc) : super(RecordState.copy(_storageBloc.state.data[_index])) {
+  RecordBloc._(this._index, this._storageBloc, RecordState state) : super(state) {
     on<RecordTitleChanged>(_onTitleChanged);
     on<RecordNoteChanged>(_onNoteChanged);
     on<RecordEntriesChanged>(_onEntriesChanged);
     on<RecordSubmitted>(_onSubmitted);
   }
-
-  int get idx => _index;
+  factory RecordBloc.copy(int index, StorageBloc storage) => RecordBloc._(index, storage, RecordState.copy(storage.state.data[index]));
+  factory RecordBloc.create(StorageBloc storage) => RecordBloc._(null, storage, RecordState.create());
 
   void _onTitleChanged(RecordTitleChanged event, Emitter<RecordState> emit) {
     final title = TitleForm.dirty(event.title);
@@ -49,8 +49,8 @@ class RecordBloc extends Bloc<RecordEvent, RecordState> {
     if (state.status.isValidated) {
       emit(state.copyWith(status: FormzStatus.submissionInProgress));
       final entries = state.entries.map((e) => e.value).toList();
-      if (_index != -1) {
-        _storageBloc.add(RecordChanged(_index, Record(state.title.value, state.note.value, entries)));
+      if (_index != null) {
+        _storageBloc.add(RecordChanged(_index!, Record(state.title.value, state.note.value, entries)));
       } else {
         _storageBloc.add(RecordAdded(Record(state.title.value, state.note.value, entries)));
       }

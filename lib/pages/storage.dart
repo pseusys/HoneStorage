@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:honestorage/blocs/cache/state.dart';
 import 'package:honestorage/navigation/delegate.dart';
+import 'package:honestorage/navigation/support.dart';
 import 'package:honestorage/repositories/backup.dart';
 import 'package:honestorage/widgets/storage.dart';
-
 import 'package:honestorage/blocs/storage/bloc.dart';
-import 'package:honestorage/blocs/storage/event.dart';
 
 class StoragePage extends StatelessWidget {
   static const title = 'HoneStorage';
@@ -26,10 +26,12 @@ class StoragePage extends StatelessWidget {
           title: Text("${StoragePage.title}: ${cache.cacheStorage!.name}"),
         ),
         body: const StorageWidget(),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => bloc.add(RecordAdded(rec)),
-          tooltip: "Add a record",
-          child: const Icon(Icons.add),
+        floatingActionButton: Builder(
+          builder: (context) => FloatingActionButton(
+            onPressed: () => context.delegate.showRecordAddDialog(context),
+            tooltip: "Add a record",
+            child: const Icon(Icons.add),
+          ),
         ),
       ),
     );
