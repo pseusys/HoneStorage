@@ -15,33 +15,50 @@ class RecordBloc extends Bloc<RecordEvent, RecordState> {
   RecordBloc._(this._index, this._storageBloc, RecordState state) : super(state) {
     on<RecordTitleChanged>(_onTitleChanged);
     on<RecordNoteChanged>(_onNoteChanged);
-    on<RecordEntriesChanged>(_onEntriesChanged);
+    on<RecordEntryAdded>(_onEntryAdded);
+    on<RecordEntryChanged>(_onEntryChanged);
+    on<RecordEntryRemoved>(_onEntryRemoved);
     on<RecordSubmitted>(_onSubmitted);
   }
   factory RecordBloc.copy(int index, StorageBloc storage) => RecordBloc._(index, storage, RecordState.copy(storage.state.data[index]));
   factory RecordBloc.create(StorageBloc storage) => RecordBloc._(null, storage, RecordState.create());
 
   void _onTitleChanged(RecordTitleChanged event, Emitter<RecordState> emit) {
-    final title = TitleForm.dirty(event.title);
     emit(state.copyWith(
-      title: title,
-      status: Formz.validate([title, state.note, for (var photo in state.entries) photo, EntriesForm.dirty(state.entries)]),
+      title: event.title,
+      status: Formz.validate([event.title, state.note, for (var entry in state.entries) entry, EntriesForm.dirty(state.entries)]),
     ));
   }
 
   void _onNoteChanged(RecordNoteChanged event, Emitter<RecordState> emit) {
-    final note = NoteForm.dirty(event.note);
     emit(state.copyWith(
-      note: note,
-      status: Formz.validate([state.title, note, for (var photo in state.entries) photo, EntriesForm.dirty(state.entries)]),
+      note: event.note,
+      status: Formz.validate([state.title, event.note, for (var entry in state.entries) entry, EntriesForm.dirty(state.entries)]),
     ));
   }
 
-  void _onEntriesChanged(RecordEntriesChanged event, Emitter<RecordState> emit) {
-    final entries = event.entries.map((e) => EntryForm.dirty(e)).toList();
+  void _onEntryAdded(RecordEntryAdded event, Emitter<RecordState> emit) {
+    final entries = List<EntryForm>.from(state.entries)..add(event.entry);
     emit(state.copyWith(
       entries: entries,
-      status: Formz.validate([state.title, state.note, for (var photo in entries) photo, EntriesForm.dirty(entries)]),
+      status: Formz.validate([state.title, state.note, for (var entry in entries) entry, EntriesForm.dirty(entries)]),
+    ));
+  }
+
+  void _onEntryChanged(RecordEntryChanged event, Emitter<RecordState> emit) {
+    final entries = List<EntryForm>.from(state.entries);
+    entries[event.index] = event.entry;
+    emit(state.copyWith(
+      entries: entries,
+      status: Formz.validate([state.title, state.note, for (var entry in entries) entry, EntriesForm.dirty(entries)]),
+    ));
+  }
+
+  void _onEntryRemoved(RecordEntryRemoved event, Emitter<RecordState> emit) {
+    final entries = List<EntryForm>.from(state.entries)..removeAt(event.index);
+    emit(state.copyWith(
+      entries: entries,
+      status: Formz.validate([state.title, state.note, for (var entry in entries) entry, EntriesForm.dirty(entries)]),
     ));
   }
 

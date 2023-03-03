@@ -57,16 +57,16 @@ extension PageOrDialogSupports on HonestRouterDelegate {
             view: false,
             getSwitchName: (_) => 'Add new record',
             switchActions: (context, setState) {
-              final record = context.read<RecordBloc>();
               return [
-                IconButton(
-                  icon: const Icon(Icons.send),
-                  onPressed: record.state.status.isValid
-                      ? () {
-                          record.add(const RecordSubmitted());
-                          if (record.state.status == FormzStatus.submissionSuccess) Navigator.pop(context);
-                        }
-                      : null,
+                BlocBuilder<RecordBloc, RecordState>(
+                  buildWhen: (previous, current) => previous.status != current.status,
+                  builder: (context, state) {
+                    if (state.status == FormzStatus.submissionSuccess) Navigator.pop(context);
+                    return IconButton(
+                      icon: const Icon(Icons.send),
+                      onPressed: state.status.isValid ? () => context.read<RecordBloc>().add(const RecordSubmitted()) : null,
+                    );
+                  },
                 ),
               ];
             },

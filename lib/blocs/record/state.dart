@@ -1,6 +1,7 @@
 import 'package:formz/formz.dart';
 
 import 'package:honestorage/blocs/record/form.dart';
+import 'package:honestorage/models/entry.dart';
 import 'package:honestorage/models/record.dart';
 
 class RecordState {

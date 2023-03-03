@@ -16,8 +16,8 @@ class InterfaceWidget extends StatefulWidget {
   final bool implySwitchBackButton;
   final InterfaceReturnFunction<IconButton>? backButton;
   final InterfaceReturnFunction<IconButton>? switchBackButton;
-  final InterfaceReturnFunction<List<IconButton>>? actions;
-  final InterfaceReturnFunction<List<IconButton>>? switchActions;
+  final InterfaceReturnFunction<List<Widget>>? actions;
+  final InterfaceReturnFunction<List<Widget>>? switchActions;
 
   InterfaceWidget({
     Key? key,
@@ -62,7 +62,7 @@ class _InterfaceWidgetState extends State<InterfaceWidget> {
 
   void _setupVariables() {
     InterfaceReturnFunction<IconButton>? backButton;
-    InterfaceReturnFunction<List<IconButton>>? actions;
+    InterfaceReturnFunction<List<Widget>>? actions;
     if (_view) {
       _name = widget.getName(context);
       _payload = RecordViewPage(widget.index!);
@@ -88,11 +88,12 @@ class _InterfaceWidgetState extends State<InterfaceWidget> {
   }
 
   Widget _makeDialog(BuildContext context, double width) {
+    final dialogWidth = width / 3 * 2;
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Center(
         child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: width / 2, minWidth: width / 2),
+          constraints: BoxConstraints(maxWidth: dialogWidth, minWidth: dialogWidth),
           child: Card(
             color: Theme.of(context).scaffoldBackgroundColor,
             child: Column(
@@ -104,7 +105,7 @@ class _InterfaceWidgetState extends State<InterfaceWidget> {
                   automaticallyImplyLeading: _implyBackButton,
                   actions: [if (_actions != null) ..._actions!],
                 ),
-                SingleChildScrollView(
+                Flexible(
                   child: _payload,
                 ),
               ],
@@ -123,7 +124,7 @@ class _InterfaceWidgetState extends State<InterfaceWidget> {
         automaticallyImplyLeading: _implyBackButton,
         actions: [if (_actions != null) ..._actions!],
       ),
-      body: SingleChildScrollView(
+      body: Flexible(
         child: _payload,
       ),
     );

@@ -11,6 +11,7 @@ import 'package:honestorage/blocs/cache/event.dart';
 import 'package:honestorage/blocs/cache/state.dart';
 import 'package:honestorage/blocs/record/bloc.dart';
 import 'package:honestorage/blocs/record/event.dart';
+import 'package:honestorage/blocs/record/state.dart';
 import 'package:honestorage/blocs/storage/bloc.dart';
 import 'package:honestorage/blocs/storage/event.dart';
 import 'package:honestorage/navigation/interface.dart';

@@ -14,12 +14,4 @@ class StorageState {
         encoding ?? this.encoding,
         data: data ?? this.data,
       );
-
-  StorageState addRecord(Record current) => copyWith(data: List<Record>.from(data)..add(current));
-  StorageState removeRecord(int index) => copyWith(data: List<Record>.from(data)..removeAt(index));
-  StorageState changeRecord(int index, Record current) {
-    final newData = List<Record>.from(data);
-    newData[index] = current;
-    return copyWith(data: newData);
-  }
 }

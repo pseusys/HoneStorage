@@ -37,7 +37,7 @@ class EntriesForm extends FormzInput<List<EntryForm>, EntriesValidationError> {
 enum EntryValidationError { nameEmpty, dataInvalid }
 
 class EntryForm extends FormzInput<Entry, EntryValidationError> {
-  EntryForm.dirty(Entry value) : super.dirty(value);
+  EntryForm.dirty([Entry? value]) : super.dirty(value ?? Entry.create());
 
   @override
   EntryValidationError? validator(Entry? value) {

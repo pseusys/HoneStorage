@@ -16,7 +16,8 @@ class RecordViewPage extends StatelessWidget {
       buildWhen: (previous, current) => previous.title != current.title,
       builder: (context, state) => Padding(
         padding: const EdgeInsets.all(SMALL_MARGIN),
-        child: Column(
+        child: ListView(
+          shrinkWrap: true,
           children: [
             if (state.note.value.isNotEmpty) MarkdownBody(data: state.note.value),
             for (var entry in state.entries) EntryRecordViewWidget(entry.value),
