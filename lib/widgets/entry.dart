@@ -14,10 +14,10 @@ showAlertDialog(BuildContext context, String content) => showDialog(
           actions: [
             TextButton(
               child: const Text("Copy to clipboard"),
-              onPressed: () async => await Clipboard.setData(ClipboardData(text: content)),
+              onPressed: () => Clipboard.setData(ClipboardData(text: content)).then((_) => Navigator.pop(context)),
             ),
             TextButton(
-              child: const Text("Continue"),
+              child: const Text("Dismiss"),
               onPressed: () => Navigator.pop(context),
             ),
           ],
