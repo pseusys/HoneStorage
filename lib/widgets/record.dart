@@ -6,6 +6,8 @@ import 'package:honestorage/navigation/delegate.dart';
 import 'package:honestorage/navigation/support.dart';
 import 'package:honestorage/widgets/entry.dart';
 
+const _boldFont = TextStyle(fontWeight: FontWeight.bold);
+
 class RecordWidget extends StatelessWidget {
   final Record content;
   final int id;
@@ -34,7 +36,7 @@ class RecordWidget extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(content.title),
+              Text(content.title, style: _boldFont),
               for (var entry in content.entries) EntryStorageWidget(entry),
             ],
           ),

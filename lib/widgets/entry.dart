@@ -102,7 +102,6 @@ class EntryRecordEditWidget extends StatelessWidget {
                 child: TextField(
                   controller: _nameController,
                   key: const Key('recordForm_entryInput_nameField'),
-                  style: _boldFont,
                   onChanged: (name) => context.read<EntryBloc>().add(NameChanged.raw(name)),
                   decoration: InputDecoration(
                     hintText: "Entry name",
