@@ -3,6 +3,8 @@ import 'package:honestorage/models/format.dart';
 class BankCardFormat extends Format {
   static final _checker = RegExp(r'^\d{16}$');
 
+  const BankCardFormat();
+
   @override
   bool get multiline => false;
 

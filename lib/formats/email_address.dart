@@ -3,6 +3,8 @@ import 'package:honestorage/models/format.dart';
 class EmailAddressFormat extends Format {
   static final _checker = RegExp(r"^[a-zA-Z\d.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z\d-]+(?:\.[a-zA-Z\d-]+)*$");
 
+  const EmailAddressFormat();
+
   @override
   bool get multiline => false;
 

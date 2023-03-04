@@ -1,7 +1,9 @@
 import 'package:honestorage/models/format.dart';
 
 class MultilineTextFormat extends Format {
-  static final _checker = RegExp(r'^[\s\S]*$');
+  static final _checker = RegExp(r'^[\s\S]+$');
+
+  const MultilineTextFormat();
 
   @override
   bool get multiline => true;

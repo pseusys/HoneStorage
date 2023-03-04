@@ -1,7 +1,9 @@
 import 'package:honestorage/models/format.dart';
 
 class PlainTextFormat extends Format {
-  static final _checker = RegExp(r'^[^\n]*');
+  static final _checker = RegExp(r'^[^\n]+$');
+
+  const PlainTextFormat();
 
   @override
   bool get multiline => false;

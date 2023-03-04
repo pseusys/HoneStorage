@@ -1,7 +1,9 @@
 import 'package:honestorage/models/format.dart';
 
 class PINCodeFormat extends Format {
-  static final _checker = RegExp(r'\d*');
+  static final _checker = RegExp(r'^\d+$');
+
+  const PINCodeFormat();
 
   @override
   bool get multiline => false;
