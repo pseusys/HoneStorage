@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:formz/formz.dart';
 import 'package:honestorage/blocs/entry/bloc.dart';
 import 'package:honestorage/blocs/entry/state.dart';
 import 'package:markdown_editable_textinput/format_markdown.dart';
@@ -45,11 +44,11 @@ class _TitleInput extends StatelessWidget {
             controller: _titleController,
             key: const Key('recordForm_titleInput_textField'),
             onChanged: (title) => context.read<RecordBloc>().add(RecordTitleChanged.raw(title)),
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               hintText: "What's the record name?",
+              errorText: state.title.invalid ? 'Invalid title name' : null,
             ),
           ),
-          if (state.title.invalid) const Text('Invalid title name'),
         ],
       ),
     );
@@ -64,13 +63,12 @@ class _NoteInput extends StatelessWidget {
       builder: (context, state) => Column(
         children: [
           MarkdownTextInput(
-            (note) => context.read<RecordBloc>().add(RecordNoteChanged.raw(note)),
-            state.note.value,
+            (note) => context.read<RecordBloc>().add(RecordNoteChanged(note)),
+            state.note,
             maxLines: 5,
             actions: MarkdownType.values,
             insertLinksByDialog: false,
           ),
-          if (state.note.invalid) const Text('Invalid note text'),
         ],
       ),
     );
@@ -93,7 +91,6 @@ class _EntriesInput extends StatelessWidget {
             onPressed: () => context.read<RecordBloc>().add(RecordEntryAdded(EntryState.copy(Entry.create()))),
             child: const Text("Add new entry..."),
           ),
-          if (state.status.isInvalid && state.entries.isEmpty) const Text('No entries!'),
         ],
       ),
     );

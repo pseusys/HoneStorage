@@ -12,9 +12,8 @@ class RecordTitleChanged extends RecordEvent {
 }
 
 class RecordNoteChanged extends RecordEvent {
-  final NoteForm note;
+  final String note;
   const RecordNoteChanged(this.note);
-  factory RecordNoteChanged.raw(String note) => RecordNoteChanged(NoteForm.dirty(note));
 }
 
 class RecordEntryAdded extends RecordEvent {

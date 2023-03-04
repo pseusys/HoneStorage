@@ -12,16 +12,6 @@ class TitleForm extends FormzInput<String, TitleValidationError> {
   }
 }
 
-enum NoteValidationError { never }
-
-class NoteForm extends FormzInput<String, NoteValidationError> {
-  const NoteForm.pure() : super.pure('');
-  const NoteForm.dirty([String value = '']) : super.dirty(value);
-
-  @override
-  NoteValidationError? validator(String? value) => null;
-}
-
 enum EntriesValidationError { empty, invalid }
 
 class EntriesForm extends FormzInput<List<EntryState>, EntriesValidationError> {
@@ -29,8 +19,6 @@ class EntriesForm extends FormzInput<List<EntryState>, EntriesValidationError> {
 
   @override
   EntriesValidationError? validator(List<EntryState>? value) {
-    if (value?.isEmpty == true) return EntriesValidationError.empty;
-    if (value?.any((element) => element.status != FormzStatus.valid) == true) return EntriesValidationError.invalid;
-    return null;
+    return value?.any((element) => element.status != FormzStatus.valid) == true ? EntriesValidationError.invalid : null;
   }
 }

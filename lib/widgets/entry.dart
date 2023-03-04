@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:formz/formz.dart';
 import 'package:honestorage/blocs/entry/bloc.dart';
 import 'package:honestorage/blocs/entry/event.dart';
 import 'package:honestorage/blocs/entry/state.dart';
@@ -105,8 +104,9 @@ class EntryRecordEditWidget extends StatelessWidget {
                   key: const Key('recordForm_entryInput_nameField'),
                   style: _boldFont,
                   onChanged: (name) => context.read<EntryBloc>().add(NameChanged.raw(name)),
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     hintText: "Entry name",
+                    errorText: state.name.invalid ? 'Invalid entry name' : null,
                   ),
                 ),
               ),
@@ -115,14 +115,14 @@ class EntryRecordEditWidget extends StatelessWidget {
                   controller: _dataController,
                   key: const Key('recordForm_entryInput_dataField'),
                   onChanged: (data) => context.read<EntryBloc>().add(DataChanged(data)),
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     hintText: "Entry data",
+                    errorText: state.data.invalid ? 'Invalid entry data' : null,
                   ),
                 ),
               ),
             ],
           ),
-          if (state.status.isInvalid) const Text('Invalid entry'),
         ],
       ),
     );

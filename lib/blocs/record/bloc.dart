@@ -26,14 +26,14 @@ class RecordBloc extends Bloc<RecordEvent, RecordState> {
   void _onTitleChanged(RecordTitleChanged event, Emitter<RecordState> emit) {
     emit(state.copyWith(
       title: event.title,
-      status: Formz.validate([event.title, state.note, EntriesForm.dirty(state.entries)]),
+      status: Formz.validate([event.title, EntriesForm.dirty(state.entries)]),
     ));
   }
 
   void _onNoteChanged(RecordNoteChanged event, Emitter<RecordState> emit) {
     emit(state.copyWith(
       note: event.note,
-      status: Formz.validate([state.title, event.note, EntriesForm.dirty(state.entries)]),
+      status: Formz.validate([state.title, EntriesForm.dirty(state.entries)]),
     ));
   }
 
@@ -41,7 +41,7 @@ class RecordBloc extends Bloc<RecordEvent, RecordState> {
     final entries = List<EntryState>.from(state.entries)..add(event.entry);
     emit(state.copyWith(
       entries: entries,
-      status: Formz.validate([state.title, state.note, EntriesForm.dirty(entries)]),
+      status: Formz.validate([state.title, EntriesForm.dirty(entries)]),
     ));
   }
 
@@ -50,7 +50,7 @@ class RecordBloc extends Bloc<RecordEvent, RecordState> {
     entries[event.index] = event.entry;
     emit(state.copyWith(
       entries: entries,
-      status: Formz.validate([state.title, state.note, EntriesForm.dirty(entries)]),
+      status: Formz.validate([state.title, EntriesForm.dirty(entries)]),
     ));
   }
 
@@ -58,7 +58,7 @@ class RecordBloc extends Bloc<RecordEvent, RecordState> {
     final entries = List<EntryState>.from(state.entries)..removeAt(event.index);
     emit(state.copyWith(
       entries: entries,
-      status: Formz.validate([state.title, state.note, EntriesForm.dirty(entries)]),
+      status: Formz.validate([state.title, EntriesForm.dirty(entries)]),
     ));
   }
 
