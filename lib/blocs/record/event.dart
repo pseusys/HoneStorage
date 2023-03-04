@@ -1,5 +1,5 @@
+import 'package:honestorage/blocs/entry/state.dart';
 import 'package:honestorage/blocs/record/form.dart';
-import 'package:honestorage/models/entry.dart';
 
 abstract class RecordEvent {
   const RecordEvent();
@@ -18,16 +18,14 @@ class RecordNoteChanged extends RecordEvent {
 }
 
 class RecordEntryAdded extends RecordEvent {
-  final EntryForm entry;
+  final EntryState entry;
   const RecordEntryAdded(this.entry);
-  factory RecordEntryAdded.raw(Entry entry) => RecordEntryAdded(EntryForm.dirty(entry));
 }
 
 class RecordEntryChanged extends RecordEvent {
   final int index;
-  final EntryForm entry;
+  final EntryState entry;
   const RecordEntryChanged(this.index, this.entry);
-  factory RecordEntryChanged.raw(int index, Entry entry) => RecordEntryChanged(index, EntryForm.dirty(entry));
 }
 
 class RecordEntryRemoved extends RecordEvent {

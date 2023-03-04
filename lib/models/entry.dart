@@ -16,7 +16,7 @@ class Entry {
   final String data;
 
   const Entry(this.name, this.data, this.format);
-  factory Entry.create() => Entry("", "", PlainTextFormat());
+  factory Entry.create() => const Entry("", "", PlainTextFormat());
   Entry copyWith({Format? format, String? name, String? data}) => Entry(name ?? this.name, data ?? this.data, format ?? this.format);
 
   String get private => format.check(data) ? format.viewPrivate(data) : data;

@@ -5,4 +5,4 @@ toNull(_) => null;
 emptyList(_) => [];
 
 formatToString(Format format) => format.runtimeType.toString();
-stringToFormat(String format) => FORMATS[format]!.constructor.call();
+stringToFormat(String format) => FORMATS[format]!.format;

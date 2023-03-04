@@ -1,10 +1,9 @@
 import 'package:formz/formz.dart';
-import 'package:honestorage/models/entry.dart';
+import 'package:honestorage/blocs/entry/state.dart';
 
 enum TitleValidationError { empty }
 
 class TitleForm extends FormzInput<String, TitleValidationError> {
-  const TitleForm.pure() : super.pure('');
   const TitleForm.dirty([String value = '']) : super.dirty(value);
 
   @override
@@ -23,26 +22,15 @@ class NoteForm extends FormzInput<String, NoteValidationError> {
   NoteValidationError? validator(String? value) => null;
 }
 
-enum EntriesValidationError { empty }
+enum EntriesValidationError { empty, invalid }
 
-class EntriesForm extends FormzInput<List<EntryForm>, EntriesValidationError> {
-  EntriesForm.dirty(List<EntryForm> value) : super.dirty(value);
-
-  @override
-  EntriesValidationError? validator(List<EntryForm>? value) {
-    return value?.isNotEmpty == true ? null : EntriesValidationError.empty;
-  }
-}
-
-enum EntryValidationError { nameEmpty, dataInvalid }
-
-class EntryForm extends FormzInput<Entry, EntryValidationError> {
-  EntryForm.dirty([Entry? value]) : super.dirty(value ?? Entry.create());
+class EntriesForm extends FormzInput<List<EntryState>, EntriesValidationError> {
+  EntriesForm.dirty(List<EntryState> value) : super.dirty(value);
 
   @override
-  EntryValidationError? validator(Entry? value) {
-    if (value?.name.isNotEmpty != true) return EntryValidationError.nameEmpty;
-    if (value?.check != true) return EntryValidationError.dataInvalid;
+  EntriesValidationError? validator(List<EntryState>? value) {
+    if (value?.isEmpty == true) return EntriesValidationError.empty;
+    if (value?.any((element) => element.status != FormzStatus.valid) == true) return EntriesValidationError.invalid;
     return null;
   }
 }

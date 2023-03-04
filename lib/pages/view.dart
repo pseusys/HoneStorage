@@ -20,7 +20,7 @@ class RecordViewPage extends StatelessWidget {
           shrinkWrap: true,
           children: [
             if (state.note.value.isNotEmpty) MarkdownBody(data: state.note.value),
-            for (var entry in state.entries) EntryRecordViewWidget(entry.value),
+            for (var entry in state.entries) EntryRecordViewWidget(entry.cast()),
           ],
         ),
       ),

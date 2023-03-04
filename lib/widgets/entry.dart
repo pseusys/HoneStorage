@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
+import 'package:honestorage/blocs/entry/bloc.dart';
+import 'package:honestorage/blocs/entry/event.dart';
+import 'package:honestorage/blocs/entry/state.dart';
 
 import 'package:honestorage/models/entry.dart';
 import 'package:honestorage/models/format.dart';
@@ -69,52 +74,57 @@ class EntryRecordViewWidget extends StatelessWidget {
 }
 
 class EntryRecordEditWidget extends StatelessWidget {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _dataController = TextEditingController();
+  final TextEditingController _nameController;
+  final TextEditingController _dataController;
 
-  final Entry content;
-  final Function(Entry entry)? onChanged;
-
-  EntryRecordEditWidget(this.content, {this.onChanged, Key? key}) : super(key: key);
+  EntryRecordEditWidget(String name, String data, {Key? key})
+      : _nameController = TextEditingController(text: name),
+        _dataController = TextEditingController(text: data),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    _nameController.text = content.name;
-    _nameController.selection = TextSelection.collapsed(offset: _nameController.text.length);
-    _dataController.text = content.data;
-    _dataController.selection = TextSelection.collapsed(offset: _dataController.text.length);
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Flexible(
-          child: DropdownButton<String>(
-            value: content.format.runtimeType.toString(),
-            items: FORMATS.entries.map((e) => DropdownMenuItem(value: e.key, child: Text(e.value.description))).toList(),
-            onChanged: (String? value) => onChanged?.call(content.copyWith(format: FORMATS[value]?.constructor.call())),
+    return BlocBuilder<EntryBloc, EntryState>(
+      builder: (context, state) => Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                child: DropdownButton<Format>(
+                  value: state.format,
+                  items: FORMATS.entries.map((e) => DropdownMenuItem(value: e.value.format, child: Text(e.value.description))).toList(),
+                  onChanged: (Format? value) {
+                    if (value != null) context.read<EntryBloc>().add(FormatChanged(value));
+                  },
+                ),
+              ),
+              Flexible(
+                child: TextField(
+                  controller: _nameController,
+                  key: const Key('recordForm_entryInput_nameField'),
+                  style: _boldFont,
+                  onChanged: (name) => context.read<EntryBloc>().add(NameChanged.raw(name)),
+                  decoration: const InputDecoration(
+                    hintText: "Entry name",
+                  ),
+                ),
+              ),
+              Flexible(
+                child: TextField(
+                  controller: _dataController,
+                  key: const Key('recordForm_entryInput_dataField'),
+                  onChanged: (data) => context.read<EntryBloc>().add(DataChanged(data)),
+                  decoration: const InputDecoration(
+                    hintText: "Entry data",
+                  ),
+                ),
+              ),
+            ],
           ),
-        ),
-        Flexible(
-          child: TextField(
-            controller: _nameController,
-            key: const Key('recordForm_entryInput_nameField'),
-            style: _boldFont,
-            onChanged: (name) => onChanged?.call(content.copyWith(name: name)),
-            decoration: const InputDecoration(
-              hintText: "Entry name",
-            ),
-          ),
-        ),
-        Flexible(
-          child: TextField(
-            controller: _dataController,
-            key: const Key('recordForm_entryInput_dataField'),
-            onChanged: (data) => onChanged?.call(content.copyWith(data: data)),
-            decoration: const InputDecoration(
-              hintText: "Entry data",
-            ),
-          ),
-        ),
-      ],
+          if (state.status.isInvalid) const Text('Invalid entry'),
+        ],
+      ),
     );
   }
 }

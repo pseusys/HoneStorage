@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
+import 'package:honestorage/blocs/entry/bloc.dart';
+import 'package:honestorage/blocs/entry/state.dart';
 import 'package:markdown_editable_textinput/format_markdown.dart';
 import 'package:markdown_editable_textinput/markdown_text_input.dart';
 
-import 'package:honestorage/blocs/record/form.dart';
+import 'package:honestorage/models/entry.dart';
 import 'package:honestorage/blocs/record/bloc.dart';
 import 'package:honestorage/blocs/record/event.dart';
 import 'package:honestorage/blocs/record/state.dart';
 import 'package:honestorage/misc/constants.dart';
 import 'package:honestorage/widgets/entry.dart';
-
-bool entryFormListsEqual(List<EntryForm> list1, List<EntryForm> list2) {
-  if (list1.length != list2.length) return false;
-  for (var i = 0; i < list1.length; i++) {
-    if (!list1[i].value.equals(list2[i].value)) return false;
-  }
-  return true;
-}
 
 class RecordEditPage extends StatelessWidget {
   RecordEditPage(int? id) : super(key: ValueKey(id == null ? 'RecordAddPage' : 'RecordEditPageId$id'));
@@ -86,23 +81,19 @@ class _EntriesInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RecordBloc, RecordState>(
-      buildWhen: (previous, current) => !entryFormListsEqual(previous.entries, current.entries),
+      buildWhen: (previous, current) => previous.entries.length != current.entries.length,
       builder: (context, state) => Column(
         children: [
           for (var i = 0; i < state.entries.length; i++)
-            Column(
-              children: [
-                EntryRecordEditWidget(
-                  state.entries[i].value,
-                  onChanged: (entry) => context.read<RecordBloc>().add(RecordEntryChanged.raw(i, entry)),
-                ),
-                if (state.entries[i].invalid) const Text('Invalid record'),
-              ],
+            BlocProvider<EntryBloc>(
+              create: (context) => EntryBloc(i, context.read<RecordBloc>(), state.entries[i]),
+              child: EntryRecordEditWidget(state.entries[i].name.value, state.entries[i].data.value),
             ),
           TextButton(
-            onPressed: () => context.read<RecordBloc>().add(RecordEntryAdded(EntryForm.dirty())),
+            onPressed: () => context.read<RecordBloc>().add(RecordEntryAdded(EntryState.copy(Entry.create()))),
             child: const Text("Add new entry..."),
           ),
+          if (state.status.isInvalid && state.entries.isEmpty) const Text('No entries!'),
         ],
       ),
     );
