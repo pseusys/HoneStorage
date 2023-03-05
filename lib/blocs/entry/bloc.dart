@@ -26,9 +26,11 @@ class EntryBloc extends Bloc<EntryEvent, EntryState> {
   }
 
   void _onFormatChanged(FormatChanged event, Emitter<EntryState> emit) {
+    final data = DataForm.dirty(event.format, state.data.value);
     final ns = state.copyWith(
       format: event.format,
-      status: Formz.validate([state.name, DataForm.dirty(event.format, state.data.value)]),
+      data: data,
+      status: Formz.validate([state.name, data]),
     );
     emit(ns);
     _recordBloc.add(RecordEntryChanged(_index, ns));

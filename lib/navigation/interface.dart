@@ -124,9 +124,7 @@ class _InterfaceWidgetState extends State<InterfaceWidget> {
         automaticallyImplyLeading: _implyBackButton,
         actions: [if (_actions != null) ..._actions!],
       ),
-      body: Flexible(
-        child: _payload,
-      ),
+      body: _payload,
     );
   }
 }
