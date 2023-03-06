@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:honestorage/backends/download.dart';
 
 import 'package:honestorage/blocs/cache/state.dart';
 import 'package:honestorage/navigation/delegate.dart';
@@ -24,6 +25,21 @@ class StoragePage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text("${StoragePage.title}: ${cache.cacheStorage!.name}"),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.download),
+              onPressed: () async {
+                final file = await load();
+                file.data.addAll([110, 103, 111, 110, 101, 101]);
+                await sync(file);
+                file.data.addAll([110, 103, 111, 110, 101, 101]);
+                await sync(file);
+                file.data.addAll([110, 103, 111, 110, 101, 101]);
+                await sync(file);
+                save(file, "new_file.txt");
+              },
+            ),
+          ],
         ),
         body: const StorageWidget(),
         floatingActionButton: Builder(
