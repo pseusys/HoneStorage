@@ -1,7 +1,7 @@
 import 'package:formz/formz.dart';
 import 'package:honestorage/formats/plain_text.dart';
 
-import 'package:honestorage/models/format.dart';
+import 'package:honestorage/formats/format.dart';
 
 enum NameValidationError { empty }
 

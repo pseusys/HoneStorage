@@ -2,7 +2,7 @@ import 'package:formz/formz.dart';
 
 import 'package:honestorage/blocs/entry/form.dart';
 import 'package:honestorage/models/entry.dart';
-import 'package:honestorage/models/format.dart';
+import 'package:honestorage/formats/format.dart';
 
 class EntryState {
   final FormzStatus status;

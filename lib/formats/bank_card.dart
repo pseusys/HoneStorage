@@ -1,4 +1,4 @@
-import 'package:honestorage/models/format.dart';
+import 'package:honestorage/formats/format.dart';
 
 class BankCardFormat extends Format {
   static final _checker = RegExp(r'^\d{16}$');

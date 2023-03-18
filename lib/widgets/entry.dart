@@ -6,7 +6,7 @@ import 'package:honestorage/blocs/entry/event.dart';
 import 'package:honestorage/blocs/entry/state.dart';
 
 import 'package:honestorage/models/entry.dart';
-import 'package:honestorage/models/format.dart';
+import 'package:honestorage/formats/format.dart';
 
 const _boldFont = TextStyle(fontWeight: FontWeight.bold);
 

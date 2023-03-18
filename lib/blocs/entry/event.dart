@@ -1,5 +1,5 @@
 import 'package:honestorage/blocs/entry/form.dart';
-import 'package:honestorage/models/format.dart';
+import 'package:honestorage/formats/format.dart';
 
 abstract class EntryEvent {
   const EntryEvent();

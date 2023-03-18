@@ -1,7 +1,7 @@
 import 'package:honestorage/formats/plain_text.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:honestorage/models/format.dart';
+import 'package:honestorage/formats/format.dart';
 import 'package:honestorage/misc/convertors.dart';
 
 part 'entry.g.dart';
