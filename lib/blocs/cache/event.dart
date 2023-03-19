@@ -6,7 +6,9 @@ abstract class CacheEvent {
 
 class CacheLoaded extends CacheEvent {
   final String? current;
-  const CacheLoaded(this.current);
+  final String? password;
+  CacheLoaded.plain(this.current) : password = null;
+  CacheLoaded.present(this.current, this.password);
 }
 
 class CacheDecrypted extends CacheEvent {

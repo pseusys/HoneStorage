@@ -8,6 +8,7 @@ class StorageState {
 
   StorageState(this.name, this.encoding, {this.data = const []});
   factory StorageState.copy(Storage current) => StorageState(current.name, current.encoding, data: current.data);
+  Storage cast() => Storage.fromData(name, encoding, data);
 
   StorageState copyWith({String? name, String? description, String? encoding, List<Record>? data}) => StorageState(
         name ?? this.name,

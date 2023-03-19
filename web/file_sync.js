@@ -9,12 +9,16 @@ const pickerOpts = {
     ]
 };
 
+function isFilePickAvailable() {
+    return typeof window.showOpenFilePicker instanceof Function;
+}
+
 async function pickFile() {
     const [handle] = await window.showOpenFilePicker(pickerOpts);
     return handle;
 }
 
-async function pickFile(handle) {
+async function loadFile(handle) {
     return await (await handle.getFile()).arrayBuffer();
 }
 

@@ -15,4 +15,5 @@ class Record {
 
   const Record(this.title, this.note, this.entries);
   factory Record.fromJson(Map<String, dynamic> json) => _$RecordFromJson(json);
+  Map<String, dynamic> toJson() => _$RecordToJson(this);
 }
