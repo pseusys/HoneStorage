@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:honestorage/blocs/cache/bloc.dart';
-import 'package:honestorage/repositories/cache.dart';
+import 'package:honestorage/repositories/backend.dart';
 
-import 'package:honestorage/repositories/backup.dart';
 import 'package:honestorage/navigation/delegate.dart';
 
 void main() => runApp(Root());
@@ -11,19 +10,15 @@ void main() => runApp(Root());
 class Root extends StatelessWidget {
   static const String title = 'HoneStorage';
 
-  final cache = CacheRepository();
-  final backup = BackupRepository();
+  final backend = BackendRepository();
   Root({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MultiRepositoryProvider(
-      providers: [
-        RepositoryProvider.value(value: cache),
-        RepositoryProvider.value(value: backup),
-      ],
+    return RepositoryProvider.value(
+      value: backend,
       child: BlocProvider(
-        create: (context) => CacheBloc(cache),
+        create: (context) => CacheBloc(backend),
         child: MaterialApp.router(
           title: title,
           theme: ThemeData(

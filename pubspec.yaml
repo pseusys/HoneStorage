@@ -23,6 +23,8 @@ dependencies:
   markdown_editable_textinput: ^2.2.0
   
   shared_preferences: ^2.0.17
+  flutter_file_dialog: ^3.0.0
+
   pointycastle: ^3.6.2
   json_annotation: ^4.8.0
   js: ^0.6.5

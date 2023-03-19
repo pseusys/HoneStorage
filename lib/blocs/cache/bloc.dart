@@ -3,24 +3,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:honestorage/blocs/cache/event.dart';
 import 'package:honestorage/blocs/cache/state.dart';
 import 'package:honestorage/models/storage.dart';
-
-import 'package:honestorage/repositories/cache.dart';
+import 'package:honestorage/repositories/backend.dart';
 
 class CacheBloc extends Bloc<CacheEvent, CacheState> {
-  final CacheRepository _cacheRepository;
+  final BackendRepository _backendRepository;
 
-  CacheBloc(this._cacheRepository) : super(CacheState.splash()) {
+  CacheBloc(this._backendRepository) : super(CacheState.splash()) {
     on<CacheDecrypted>((event, emit) => emit(CacheState.present(event.current)));
+    on<CacheHandled>(_cacheHandled);
     on<CacheLoaded>(_cacheLoaded);
     on<CacheSet>(_cacheSet);
 
-    _cacheRepository.getCache().then((value) => add(CacheLoaded.plain(value)));
+    _backendRepository.getCache().then((value) => add(CacheLoaded.plain(value)));
   }
 
   Future<void> _cacheLoaded(CacheLoaded event, Emitter<CacheState> emit) async {
     try {
-      print("RECV: ${event.current}");
-      final storage = Serialization.deserialize(event.current, _cacheRepository.password, _cacheRepository.identificator!);
+      final storage = Serialization.deserialize(event.current, _backendRepository.password, _backendRepository.identificator!);
       emit(CacheState.present(storage));
     } on DeserializationError catch (error) {
       switch (error.code) {
@@ -45,8 +44,13 @@ class CacheBloc extends Bloc<CacheEvent, CacheState> {
     }
   }
 
+  void _cacheHandled(CacheHandled event, Emitter<CacheState> emit) {
+    _backendRepository.setBackend(event.current);
+    add(CacheLoaded.plain(event.current.contents));
+  }
+
   void _cacheSet(CacheSet event, Emitter<CacheState> emit) {
     final serial = event.current?.toJson().toString();
-    _cacheRepository.setCache(serial).then((value) => add(CacheLoaded.plain(value)));
+    _backendRepository.setCache(serial).then((value) => add(CacheLoaded.plain(value)));
   }
 }

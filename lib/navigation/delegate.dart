@@ -52,7 +52,7 @@ class HonestRouterDelegate extends RouterDelegate<HonestRoute> with ChangeNotifi
       // context.read<BackupBloc>().add(BackupDecrypted(storage)); // To create new storage
       // context.read<BackupBloc>().add(BackupSet(backup)); // To locad from backend
     } else {
-      pages.add(MaterialPage(key: StoragePage.value, child: StoragePage(currentState, state)));
+      pages.add(MaterialPage(key: StoragePage.value, child: StoragePage(currentState, state.cacheStorage!)));
     }
     if (currentState == HonestRoute.UNKNOWN) pages.add(const MaterialPage(key: UnknownPage.value, child: UnknownPage()));
     return pages;

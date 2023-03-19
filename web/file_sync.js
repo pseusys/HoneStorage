@@ -10,7 +10,7 @@ const pickerOpts = {
 };
 
 function isFilePickAvailable() {
-    return typeof window.showOpenFilePicker instanceof Function;
+    return window.showOpenFilePicker instanceof Function;
 }
 
 async function pickFile() {

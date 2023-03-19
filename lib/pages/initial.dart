@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:honestorage/backends/backend.dart';
 import 'package:honestorage/blocs/cache/bloc.dart';
 import 'package:honestorage/blocs/cache/event.dart';
 
@@ -29,6 +30,12 @@ class InitialPage extends StatelessWidget {
               onPressed: () => context.read<CacheBloc>().add(CacheDecrypted(Storage.create())),
               child: const Text("Create storage"),
             ),
+            for (var backend in BACKENDS.values)
+              if (backend.available())
+                TextButton(
+                  onPressed: () => backend.create.call().then((value) => BlocProvider.of<CacheBloc>(context).add(CacheHandled(value))),
+                  child: Text("Open ${backend.name}"),
+                ),
           ],
         ),
       ),
