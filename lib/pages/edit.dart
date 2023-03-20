@@ -34,7 +34,8 @@ class _TitleInput extends StatelessWidget {
   final TextEditingController _titleController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    _titleController.text = context.read<RecordBloc>().state.title.value;
+    final recordBloc = BlocProvider.of<RecordBloc>(context);
+    _titleController.text = recordBloc.state.title.value;
     return BlocBuilder<RecordBloc, RecordState>(
       buildWhen: (previous, current) => previous.title != current.title,
       builder: (context, state) => Column(
@@ -43,7 +44,7 @@ class _TitleInput extends StatelessWidget {
             maxLines: 3,
             controller: _titleController,
             key: const Key('recordForm_titleInput_textField'),
-            onChanged: (title) => context.read<RecordBloc>().add(RecordTitleChanged.raw(title)),
+            onChanged: (title) => recordBloc.add(RecordTitleChanged.raw(title)),
             decoration: InputDecoration(
               hintText: "What's the record name?",
               errorText: state.title.invalid ? 'Invalid title name' : null,
@@ -63,7 +64,7 @@ class _NoteInput extends StatelessWidget {
       builder: (context, state) => Column(
         children: [
           MarkdownTextInput(
-            (note) => context.read<RecordBloc>().add(RecordNoteChanged(note)),
+            (note) => BlocProvider.of<RecordBloc>(context).add(RecordNoteChanged(note)),
             state.note,
             maxLines: 5,
             actions: MarkdownType.values,
@@ -78,17 +79,18 @@ class _NoteInput extends StatelessWidget {
 class _EntriesInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final recordBloc = BlocProvider.of<RecordBloc>(context);
     return BlocBuilder<RecordBloc, RecordState>(
       buildWhen: (previous, current) => previous.entries.length != current.entries.length,
       builder: (context, state) => Column(
         children: [
           for (var i = 0; i < state.entries.length; i++)
             BlocProvider<EntryBloc>(
-              create: (context) => EntryBloc(i, context.read<RecordBloc>(), state.entries[i]),
+              create: (context) => EntryBloc(i, recordBloc, state.entries[i]),
               child: EntryRecordEditWidget(state.entries[i].name.value, state.entries[i].data.value),
             ),
           TextButton(
-            onPressed: () => context.read<RecordBloc>().add(RecordEntryAdded(EntryState.copy(Entry.create()))),
+            onPressed: () => recordBloc.add(RecordEntryAdded(EntryState.copy(Entry.create()))),
             child: const Text("Add new entry..."),
           ),
         ],

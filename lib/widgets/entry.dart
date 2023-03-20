@@ -83,6 +83,7 @@ class EntryRecordEditWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final entryBloc = BlocProvider.of<EntryBloc>(context);
     return BlocBuilder<EntryBloc, EntryState>(
       builder: (context, state) => Column(
         children: [
@@ -94,7 +95,7 @@ class EntryRecordEditWidget extends StatelessWidget {
                   value: state.format,
                   items: FORMATS.entries.map((e) => DropdownMenuItem(value: e.value.format, child: Text(e.value.description))).toList(),
                   onChanged: (Format? value) {
-                    if (value != null) context.read<EntryBloc>().add(FormatChanged(value));
+                    if (value != null) entryBloc.add(FormatChanged(value));
                   },
                 ),
               ),
@@ -102,7 +103,7 @@ class EntryRecordEditWidget extends StatelessWidget {
                 child: TextField(
                   controller: _nameController,
                   key: const Key('recordForm_entryInput_nameField'),
-                  onChanged: (name) => context.read<EntryBloc>().add(NameChanged.raw(name)),
+                  onChanged: (name) => entryBloc.add(NameChanged.raw(name)),
                   decoration: InputDecoration(
                     hintText: "Entry name",
                     errorText: state.name.invalid ? 'Invalid entry name' : null,
@@ -113,7 +114,7 @@ class EntryRecordEditWidget extends StatelessWidget {
                 child: TextField(
                   controller: _dataController,
                   key: const Key('recordForm_entryInput_dataField'),
-                  onChanged: (data) => context.read<EntryBloc>().add(DataChanged(data)),
+                  onChanged: (data) => entryBloc.add(DataChanged(data)),
                   decoration: InputDecoration(
                     hintText: "Entry data",
                     errorText: state.data.invalid ? 'Invalid entry data' : null,

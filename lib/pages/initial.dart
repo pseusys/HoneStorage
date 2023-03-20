@@ -11,6 +11,7 @@ class InitialPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cahceBloc = BlocProvider.of<CacheBloc>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text(InitialPage.title),
@@ -25,13 +26,13 @@ class InitialPage extends StatelessWidget {
             ),
             const Text("Init app"),
             TextButton(
-              onPressed: () => BlocProvider.of<CacheBloc>(context).add(CacheHandled(null)),
+              onPressed: () => cahceBloc.add(CacheHandled(null)),
               child: const Text("Create storage"),
             ),
             for (var backend in BACKENDS.values)
               if (backend.available())
                 TextButton(
-                  onPressed: () => backend.create.call().then((value) => BlocProvider.of<CacheBloc>(context).add(CacheHandled(value))),
+                  onPressed: () => backend.create.call().then((value) => cahceBloc.add(CacheHandled(value))),
                   child: Text("Open ${backend.name}"),
                 ),
           ],

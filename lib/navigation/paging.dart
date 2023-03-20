@@ -2,7 +2,7 @@ part of 'delegate.dart';
 
 extension PageOrDialogSupports on HonestRouterDelegate {
   void showRecordViewEditDialog(BuildContext context, int index) {
-    final storageBloc = context.read<StorageBloc>();
+    final storageBloc = BlocProvider.of<StorageBloc>(context);
     showGeneralDialog(
       context: context,
       useRootNavigator: false,
@@ -11,7 +11,7 @@ extension PageOrDialogSupports on HonestRouterDelegate {
           create: (_) => RecordBloc.copy(index, storageBloc),
           child: InterfaceWidget(
             index: index,
-            getName: (BuildContext context) => context.read<RecordBloc>().state.title.value,
+            getName: (context) => BlocProvider.of<RecordBloc>(context).state.title.value,
             implySwitchBackButton: false,
             actions: (context, setState) => [
               IconButton(
@@ -30,7 +30,7 @@ extension PageOrDialogSupports on HonestRouterDelegate {
               IconButton(
                 icon: const Icon(Icons.save),
                 onPressed: () {
-                  context.read<RecordBloc>().add(const RecordSubmitted());
+                  BlocProvider.of<RecordBloc>(context).add(const RecordSubmitted());
                   setState.call();
                 },
               ),
@@ -46,13 +46,12 @@ extension PageOrDialogSupports on HonestRouterDelegate {
   }
 
   void showRecordAddDialog(BuildContext context) {
-    final storageBloc = context.read<StorageBloc>();
     showGeneralDialog(
       context: context,
       useRootNavigator: false,
       pageBuilder: (ctx, animation, secondaryAnimation) {
         return BlocProvider(
-          create: (_) => RecordBloc.create(storageBloc),
+          create: (_) => RecordBloc.create(BlocProvider.of<StorageBloc>(context)),
           child: InterfaceWidget(
             view: false,
             getSwitchName: (_) => 'Add new record',
@@ -64,7 +63,7 @@ extension PageOrDialogSupports on HonestRouterDelegate {
                     if (state.status == FormzStatus.submissionSuccess) Navigator.pop(context);
                     return IconButton(
                       icon: const Icon(Icons.send),
-                      onPressed: state.status.isValid ? () => context.read<RecordBloc>().add(const RecordSubmitted()) : null,
+                      onPressed: state.status.isValid ? () => BlocProvider.of<RecordBloc>(context).add(const RecordSubmitted()) : null,
                     );
                   },
                 ),
