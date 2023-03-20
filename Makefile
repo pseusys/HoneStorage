@@ -23,7 +23,7 @@ generate_code:
 
 run-web: dependencies generate_code
 	@ # Run in web
-	flutter build web --base-href $(WEB_BASE_REF) --dart-define BUILD_SECRET=$(echo $$RANDOM | md5sum | head -c 12)
+	flutter build web --base-href $(WEB_BASE_REF)
 .PHONY: run-web
 
 
