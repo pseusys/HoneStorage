@@ -4,8 +4,6 @@ import 'package:honestorage/backends/backend.dart';
 import 'package:honestorage/blocs/cache/bloc.dart';
 import 'package:honestorage/blocs/cache/event.dart';
 
-import 'package:honestorage/models/storage.dart';
-
 class InitialPage extends StatelessWidget {
   static const String title = 'Welcome to HoneStorage!';
   static const value = ValueKey('InitialPage');
@@ -27,7 +25,7 @@ class InitialPage extends StatelessWidget {
             ),
             const Text("Init app"),
             TextButton(
-              onPressed: () => context.read<CacheBloc>().add(CacheDecrypted(Storage.create())),
+              onPressed: () => BlocProvider.of<CacheBloc>(context).add(CacheHandled(null)),
               child: const Text("Create storage"),
             ),
             for (var backend in BACKENDS.values)

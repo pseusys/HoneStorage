@@ -1,6 +1,9 @@
 // ignore_for_file: constant_identifier_names
 
+import 'dart:async';
+
 import 'package:honestorage/backends/backend.dart';
+import 'package:honestorage/blocs/status/status.dart';
 import 'package:honestorage/models/storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,15 +15,20 @@ class BackendRepository {
   static const _STORAGE_KEY = "storage";
   static const _IDENTIFICATOR_KEY = "identificator";
 
-  FileHandle? backend;
-  DateTime? updated;
+  final _status = StreamController<BackendStatus>.broadcast();
+  Stream<BackendStatus> get statusStream => _status.stream;
+  late BackendStatus latestStatus;
 
   String? identificator = "", password;
-  String? _lastCache;
+  FileHandle? backend;
 
   Future<String?> _getValue(String key) async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.containsKey(key) ? prefs.getString(key) : null;
+  }
+
+  BackendRepository() {
+    _status.stream.listen((event) => latestStatus = event);
   }
 
   Future<String?> _setValue(String key, String? value) async {
@@ -33,19 +41,24 @@ class BackendRepository {
     return value;
   }
 
-  void setBackend(FileHandle handle) => backend = handle;
-
   Future<void> flushCache(Storage storage) async {
     if (identificator != null) {
       // TODO: if identifier == null: notify user.
-      _lastCache = storage.serialize(password, identificator!);
-      await _setValue(_STORAGE_KEY, _lastCache);
-      await backend?.populate(_lastCache);
-      updated = DateTime.now();
+      final serial = storage.serialize(password, identificator!);
+      await _setValue(_STORAGE_KEY, serial);
+      await backend?.populate(serial);
+      _status.sink.add(BackendStatus(DateTime.now(), serial));
     }
   }
 
-  void save(String name) => savePlatform(_lastCache!.codeUnits, name);
+  Future<String> setBackend(FileHandle? handle) async {
+    backend = handle;
+    final cache = await setCache(handle?.contents ?? Storage.create().serialize(null, identificator!));
+    _status.sink.add(BackendStatus(DateTime.now(), cache!));
+    return cache;
+  }
+
+  void save(String cache, String name) => savePlatform(cache.codeUnits, name);
 
   Future<String?> getCache() => _getValue(_STORAGE_KEY);
   Future<String?> setCache(String? storage) => _setValue(_STORAGE_KEY, storage);

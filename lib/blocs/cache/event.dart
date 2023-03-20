@@ -6,7 +6,7 @@ abstract class CacheEvent {
 }
 
 class CacheHandled extends CacheEvent {
-  final FileHandle current;
+  final FileHandle? current;
   CacheHandled(this.current);
 }
 
@@ -20,9 +20,4 @@ class CacheLoaded extends CacheEvent {
 class CacheDecrypted extends CacheEvent {
   final Storage? current;
   const CacheDecrypted(this.current);
-}
-
-class CacheSet extends CacheEvent {
-  final Storage? current;
-  const CacheSet(this.current);
 }

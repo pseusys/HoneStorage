@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:honestorage/blocs/status/cubit.dart';
+import 'package:honestorage/blocs/status/status.dart';
 
 import 'package:honestorage/models/storage.dart';
 import 'package:honestorage/navigation/delegate.dart';
@@ -18,24 +20,32 @@ class StoragePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<StorageBloc>(
-      create: (context) => StorageBloc(context.read<BackendRepository>(), cache),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => StorageBloc(RepositoryProvider.of<BackendRepository>(context), cache)),
+        BlocProvider(create: (context) => StatusCubit(RepositoryProvider.of<BackendRepository>(context))),
+      ],
       child: Scaffold(
-        appBar: AppBar(
-          title: Text("${StoragePage.title}: ${cache.name}"),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.sync),
-              onPressed: () async {},
-            ),
-            IconButton(
-              icon: const Icon(Icons.download),
-              onPressed: () async {
-                RepositoryProvider.of<BackendRepository>(context).save("new_file.hs");
-              },
-            ),
-            Text("Last updated: ${RepositoryProvider.of<BackendRepository>(context).updated ?? 'never'}")
-          ],
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(kToolbarHeight),
+          child: BlocBuilder<StatusCubit, BackendStatus>(
+            builder: (context, state) {
+              return AppBar(
+                title: Text("${StoragePage.title}: ${cache.name}"),
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.sync),
+                    onPressed: () async {}, // TODO: setup backup in runtime.
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.download),
+                    onPressed: () => BlocProvider.of<StatusCubit>(context).save(),
+                  ),
+                  Text("Last updated: ${state.updated.toLocal()}")
+                ],
+              );
+            },
+          ),
         ),
         body: const StorageWidget(),
         floatingActionButton: Builder(

@@ -12,7 +12,6 @@ class CacheBloc extends Bloc<CacheEvent, CacheState> {
     on<CacheDecrypted>((event, emit) => emit(CacheState.present(event.current)));
     on<CacheHandled>(_cacheHandled);
     on<CacheLoaded>(_cacheLoaded);
-    on<CacheSet>(_cacheSet);
 
     _backendRepository.getCache().then((value) => add(CacheLoaded.plain(value)));
   }
@@ -44,13 +43,8 @@ class CacheBloc extends Bloc<CacheEvent, CacheState> {
     }
   }
 
-  void _cacheHandled(CacheHandled event, Emitter<CacheState> emit) {
-    _backendRepository.setBackend(event.current);
-    add(CacheLoaded.plain(event.current.contents));
-  }
-
-  void _cacheSet(CacheSet event, Emitter<CacheState> emit) {
-    final serial = event.current?.toJson().toString();
-    _backendRepository.setCache(serial).then((value) => add(CacheLoaded.plain(value)));
+  Future<void> _cacheHandled(CacheHandled event, Emitter<CacheState> emit) async {
+    final cache = await _backendRepository.setBackend(event.current);
+    add(CacheLoaded.plain(cache));
   }
 }
