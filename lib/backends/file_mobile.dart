@@ -1,9 +1,12 @@
 import 'package:honestorage/backends/backend.dart';
 
 class LocalFileHandle extends FileHandle {
-  static bool isAvailable() => throw UnimplementedError();
+  @override
+  bool syncAvailable = true;
 
   static Future<LocalFileHandle> create() => throw UnimplementedError();
+
+  LocalFileHandle() : super(true);
 
   @override
   List<int> get data {

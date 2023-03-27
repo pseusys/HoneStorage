@@ -22,15 +22,16 @@ external dynamic _syncFile(dynamic handle, Uint8List data);
 
 class LocalFileHandle extends FileHandle {
   @override
+  bool syncAvailable = _isFilePickAvailable();
+
+  @override
   final List<int> data;
   final dynamic _handler;
 
-  LocalFileHandle(this.data, this._handler);
-
-  static bool isAvailable() => _isFilePickAvailable();
+  LocalFileHandle(this.data, this._handler) : super(true);
 
   static Future<LocalFileHandle> create() async {
-    final handle = await promiseToFuture(_pickFile());
+    final handle = await promiseToFuture(_pickFile()); // TODO: handle not picked exception.
     final content = await promiseToFuture(_loadFile(handle));
     final list = (content as ByteBuffer).asUint8List().toList();
     return LocalFileHandle(list, handle);
@@ -38,6 +39,12 @@ class LocalFileHandle extends FileHandle {
 
   @override
   Future<void> flush() async {
-    await promiseToFuture(_syncFile(_handler, Uint8List.fromList(data)));
+    try {
+      await promiseToFuture(_syncFile(_handler, Uint8List.fromList(data)));
+    } catch (_) {
+      // TODO: show user notification that synchronization was disabled.
+      syncAvailable = false;
+      syncEnabled = false;
+    }
   }
 }

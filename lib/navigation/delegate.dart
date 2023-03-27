@@ -43,7 +43,7 @@ class HonestRouterDelegate extends RouterDelegate<HonestRoute> with ChangeNotifi
     if (state.loading) {
       pages.add(const MaterialPage(key: SplashPage.value, child: SplashPage()));
     } else if (state.cacheString != null) {
-      // context.read<CacheBloc>().add(CacheDecrypted(json.decode(state.cacheString!)));
+      BlocProvider.of<CacheBloc>(context).add(CacheLoaded.plain(state.cacheString!));
       // TODO: cache decryption page
       // context.read<BackupBloc>().add(BackupDecrypted(storage)); // To decrypt storage
       // context.read<BackupBloc>().add(BackupSet(null)); // To remove cache

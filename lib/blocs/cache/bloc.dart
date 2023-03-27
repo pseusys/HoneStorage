@@ -9,7 +9,6 @@ class CacheBloc extends Bloc<CacheEvent, CacheState> {
   final BackendRepository _backendRepository;
 
   CacheBloc(this._backendRepository) : super(CacheState.splash()) {
-    on<CacheDecrypted>((event, emit) => emit(CacheState.present(event.current)));
     on<CacheHandled>(_cacheHandled);
     on<CacheLoaded>(_cacheLoaded);
 
@@ -19,6 +18,7 @@ class CacheBloc extends Bloc<CacheEvent, CacheState> {
   Future<void> _cacheLoaded(CacheLoaded event, Emitter<CacheState> emit) async {
     try {
       final storage = Serialization.deserialize(event.current, _backendRepository.password, _backendRepository.identificator!);
+      _backendRepository.setStatus(event.current!);
       emit(CacheState.present(storage));
     } on DeserializationError catch (error) {
       switch (error.code) {

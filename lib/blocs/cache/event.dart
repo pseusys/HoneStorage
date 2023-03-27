@@ -16,8 +16,3 @@ class CacheLoaded extends CacheEvent {
   CacheLoaded.plain(this.current) : password = null;
   CacheLoaded.present(this.current, this.password);
 }
-
-class CacheDecrypted extends CacheEvent {
-  final Storage? current;
-  const CacheDecrypted(this.current);
-}

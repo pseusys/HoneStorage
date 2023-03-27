@@ -27,6 +27,8 @@ class StatusCubit extends Cubit<BackendStatus> {
     }
   }
 
+  Future<void> enableSync(bool enable) async => await _backendRepository.enableSync(enable);
+
   @override
   Future<void> close() {
     _backendSubscription?.cancel();

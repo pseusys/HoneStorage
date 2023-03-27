@@ -33,15 +33,16 @@ class StoragePage extends StatelessWidget {
               return AppBar(
                 title: Text("${StoragePage.title}: ${cache.name}"),
                 actions: [
-                  IconButton(
-                    icon: const Icon(Icons.sync),
-                    onPressed: () async {}, // TODO: setup backup in runtime.
-                  ),
+                  if (state.syncAvailable)
+                    IconButton(
+                      icon: Icon(state.syncEnabled ? Icons.sync : Icons.sync_disabled),
+                      onPressed: () async => await BlocProvider.of<StatusCubit>(context).enableSync(!state.syncEnabled),
+                    ),
                   IconButton(
                     icon: const Icon(Icons.download),
                     onPressed: () => BlocProvider.of<StatusCubit>(context).save(),
                   ),
-                  Text("Last updated: ${state.updated.toLocal()}")
+                  if (state.syncEnabled) Text("Last updated: ${state.updated.toLocal()}") else const Text("Synchronization disabled")
                 ],
               );
             },

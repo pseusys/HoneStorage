@@ -30,11 +30,10 @@ class InitialPage extends StatelessWidget {
               child: const Text("Create storage"),
             ),
             for (var backend in BACKENDS.values)
-              if (backend.available())
-                TextButton(
-                  onPressed: () => backend.create.call().then((value) => cahceBloc.add(CacheHandled(value))),
-                  child: Text("Open ${backend.name}"),
-                ),
+              TextButton(
+                onPressed: () => backend.create.call().then((value) => cahceBloc.add(CacheHandled(value))),
+                child: Text("Open ${backend.name}"),
+              ),
           ],
         ),
       ),

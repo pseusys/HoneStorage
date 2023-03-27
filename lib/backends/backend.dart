@@ -5,6 +5,11 @@ import 'package:honestorage/backends/file_none.dart'
     if (dart.library.html) 'package:honestorage/backends/file_web.dart';
 
 abstract class FileHandle {
+  bool get syncAvailable;
+  bool syncEnabled;
+
+  FileHandle(this.syncEnabled);
+
   List<int> get data;
 
   String get contents => String.fromCharCodes(data);
@@ -18,14 +23,14 @@ abstract class FileHandle {
   }
 }
 
+// TODO: handle is not preserved on page reload.
 class FileHandleDescription {
   final String name;
   final Future<FileHandle> Function() create;
-  final bool Function() available;
 
-  FileHandleDescription(this.name, this.create, this.available);
+  FileHandleDescription(this.name, this.create);
 }
 
 final Map<String, FileHandleDescription> BACKENDS = {
-  (LocalFileHandle).toString(): FileHandleDescription("file storage", LocalFileHandle.create, LocalFileHandle.isAvailable),
+  (LocalFileHandle).toString(): FileHandleDescription("file storage", LocalFileHandle.create),
 };
